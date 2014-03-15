@@ -16,7 +16,7 @@ public class Engine {
 		PhaseTag[] phaseTags = PhaseTag.values();
 		mGamePhases = new GamePhase[phaseTags.length];
 		for (int i = 0; i < mGamePhases.length; i++) {
-			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i]);
+			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mGalileoInterfacer);
 		}
 		
 		mPlayerOneScore = 0;
@@ -68,6 +68,8 @@ public class Engine {
 	}
 	
 	public void conclude() throws InterruptedException {
+		mMainFrame.putText("Game over!");
+		Thread.sleep(3000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore);
 		Thread.sleep(3000);
 		mMainFrame.putText("Player 2 Score: " + mPlayerTwoScore);

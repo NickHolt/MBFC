@@ -82,23 +82,23 @@ public abstract class GamePhase {
 	 * @param tag the PhaseTag of the desired GamePhase.
 	 * @return The GamePhase representative of the TAG.
 	 */
-	public static GamePhase makeGamePhase(PhaseTag tag) {
+	public static GamePhase makeGamePhase(PhaseTag tag, GalileoInterfacer galileoInterfacer) {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
-				return new ConcentrateGamePhase();
+				return new ConcentrateGamePhase(galileoInterfacer);
 			case MEDITATE: 
-				return new MeditateGamePhase();
+				return new MeditateGamePhase(galileoInterfacer);
 			case HEARTRATE_HIGH:
-				return new HeartRateHighGamePhase();
+				return new HeartRateHighGamePhase(galileoInterfacer);
 			case HEARTRATE_LOW:
-				return new HeartRateLowGamePhase();
+				return new HeartRateLowGamePhase(galileoInterfacer);
 			case BEAT:
-				return new BeatGamePhase();
+				return new BeatGamePhase(galileoInterfacer);
 			case REACTION_TIME:
-				return new ReactionTimeGamePhase();
+				return new ReactionTimeGamePhase(galileoInterfacer);
 			case PRESSURE:
-				return new PressureGamePhase();
+				return new PressureGamePhase(galileoInterfacer);
 			default:
 				return null;
 		}
