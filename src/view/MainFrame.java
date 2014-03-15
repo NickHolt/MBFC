@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import model.Player;
+
 /** The main GUI component for a game of Mind Body Fitness Challenge. All view updates should
  *  be performed through this class.
  *  
@@ -17,7 +19,6 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ProgressBar mProgressBarOne, mProgressBarTwo;
 	private JLabel mTextPrompt;
-	private int mPlayerOneScore, mPlayerTwoScore, mMaxScore;
 	
 	public MainFrame() {
 		mProgressBarOne = new ProgressBar();
@@ -59,25 +60,17 @@ public class MainFrame extends JFrame {
         setSize(1000, 300);
 	}
 	
-	public void update() {
+	public void update(Player playerOne, Player playerTwo, int maxScore) {
 		mTextPrompt.repaint();
 		
-		mProgressBarOne.setPercentFilled(mPlayerOneScore / mMaxScore);
+		mProgressBarOne.setPercentFilled(playerOne.getGlobalScore() / maxScore);
 		mProgressBarOne.repaint();
 		
-		mProgressBarTwo.setPercentFilled(mPlayerTwoScore / mMaxScore);
+		mProgressBarTwo.setPercentFilled(playerTwo.getGlobalScore() / maxScore);
 		mProgressBarTwo.repaint();
 	}
 	
 	public void putText(String string) {
 		mTextPrompt.setText(string);
-	}
-	
-	public void incrementPlayerOneScore(int amount) {
-		mPlayerOneScore += amount;
-	}
-	
-	public void incrementPlayerTwoScore(int amount) {
-		mPlayerTwoScore += amount;
 	}
 }

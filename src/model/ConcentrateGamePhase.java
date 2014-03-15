@@ -29,9 +29,6 @@ public class ConcentrateGamePhase extends GamePhase {
 		
 		long startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < mDuration) {
-			mPlayerOneScore++;
-			mPlayerTwoScore++;
-			
 			Thread.sleep(mUpdatePeriod);
 		}
 		

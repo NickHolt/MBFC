@@ -34,7 +34,8 @@ public class Engine {
 		mGamePhases = new GamePhase[phaseTags.length];
 		mMaxScore = 0;
 		for (int i = 0; i < mGamePhases.length; i++) {
-			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mGalileoInterfacer, mMainFrame);
+			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mPlayerOne, mPlayerTwo, 
+					                                 mGalileoInterfacer, mMainFrame);
 			mMaxScore += mGamePhases[i].getMaxScore();
 		}
 		
@@ -74,13 +75,7 @@ public class Engine {
 			currentPhase.play();
 			
 			// TODO phases should update scores, not Engine
-			
-			mPlayerOneScore += currentPhase.getPlayerOneScore();
-			mPlayerTwoScore += currentPhase.getPlayerTwoScore();
-			
-			mMainFrame.setPlayerOnePercentageFill((float) mPlayerOneScore / (float) mMaxScore);
-			mMainFrame.setPlayerTwoPercentageFill((float) mPlayerTwoScore / (float) mMaxScore);
-			mMainFrame.update();
+			mMainFrame.update(mPlayerOne, mPlayerTwo, mMaxScore);
 		}
 	}
 	
