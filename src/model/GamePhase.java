@@ -3,6 +3,17 @@ package model;
 import controller.Engine;
 import controller.GalileoInterfacer;
 
+/** A phase in a game of Mind Body Fitness Challenge is a particular challenge that both
+ *  players face for a set period of time. Each player will accumulate a score specific to 
+ *  that phase which will be used to update the global score.
+ *  
+ *  An entire MBFC playthrough involved progressing through several GamePhases.
+ *  
+ *  GamePhases have direct access to the GalileoBoard and are responsible for prompting the 
+ *  user as necessary.
+ * 
+ * @author nickholt
+ */
 public abstract class GamePhase {
 	protected PhaseTag mPhaseTag;
 	protected long mDuration, mUpdatePeriod;
