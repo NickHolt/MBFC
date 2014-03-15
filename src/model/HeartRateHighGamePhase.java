@@ -1,21 +1,23 @@
 package model;
 
-import controller.GalileoInterfacer;
 
 public class HeartRateHighGamePhase extends GamePhase {
 
 	public HeartRateHighGamePhase() {
 		this.mPhaseTag = PhaseTag.HEARTRATE_HIGH;
+		this.mDuration = 10000;
+		this.mUpdatePeriod = 1000;
+		this.mMaxScore = 100;
 		// TODO
 	}
 
 	@Override
-	public float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer) {
-		return galileoInterfacer.getHeartbeatHighScore(player);
+	public float getScoreFromGalileo(int player) {
+		return mGalileoInterfacer.getHeartbeatHighScore(player);
 	}
 
 	@Override
-	public void prompt(GalileoInterfacer galileoInterfacer) {
+	public void play() {
 		// TODO Auto-generated method stub
 		
 	}

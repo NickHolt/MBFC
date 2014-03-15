@@ -5,7 +5,7 @@ import model.PhaseTag;
 import view.MainFrame;
 
 public class Engine {
-	private static final int PLAYER_ONE = 0, PLAYER_TWO = 1;
+	public static final int PLAYER_ONE = 0, PLAYER_TWO = 1;
 	
 	private GamePhase[] mGamePhases;
 	private int mPlayerOneScore, mPlayerTwoScore;
@@ -61,23 +61,9 @@ public class Engine {
 	
 	public void runMainGame() throws InterruptedException {
 		for (GamePhase currentPhase : mGamePhases) {
-			long currTime, 
-			      startTime = currTime = System.currentTimeMillis();
-
-			// get scores periodically and update state
-			while (currTime - startTime < currentPhase.getDuration()) {
-				// [0.0, 1.0] player score is translated based on phase weight
-				mPlayerOneScore += 
-						   (int) (currentPhase.getScoreFromGalileo(PLAYER_ONE, mGalileoInterfacer)
-						   * currentPhase.getIncrementWeight());
-				mPlayerTwoScore +=
-						   (int) (currentPhase.getScoreFromGalileo(PLAYER_TWO, mGalileoInterfacer)
-			               * currentPhase.getIncrementWeight());
-				
-				Thread.sleep(currentPhase.getUpdatePeriod()); // wait for next update period
-				
-				currTime = System.currentTimeMillis();
-			}
+			currentPhase.play();
+			mPlayerOneScore += currentPhase.getPlayerOneScore();
+			mPlayerTwoScore += currentPhase.getPlayerTwoScore();
 		}
 	}
 	
@@ -89,5 +75,8 @@ public class Engine {
 		mMainFrame.putText("Player " + (mPlayerOneScore > mPlayerTwoScore ? "1" : "2") + " wins!");
 		Thread.sleep(10000);
 	}
-
+	
+	public static void main(String[] args) {
+		new Engine().run();
+	}
 }

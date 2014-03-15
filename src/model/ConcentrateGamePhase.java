@@ -1,21 +1,23 @@
 package model;
 
-import controller.GalileoInterfacer;
 
 public class ConcentrateGamePhase extends GamePhase {
 
 	public ConcentrateGamePhase() {
 		this.mPhaseTag = PhaseTag.CONCENTRATE;
+		this.mDuration = 10000;
+		this.mUpdatePeriod = 1000;
+		this.mMaxScore = 100;
 		// TODO
 	}
 
 	@Override
-	public float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer) {
-		return galileoInterfacer.getConcentrationScore(player);
+	public float getScoreFromGalileo(int player) {
+		return mGalileoInterfacer.getConcentrationScore(player);
 	}
 
 	@Override
-	public void prompt(GalileoInterfacer galileoInterfacer) {
+	public void play() {
 		// TODO Auto-generated method stub
 		
 	}

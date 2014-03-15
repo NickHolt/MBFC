@@ -12,7 +12,8 @@ public class MainFrame {
 	}
 	
 	public void putText(String string) {
-		// TODO Auto-generated method stub
+		System.out.println(string);
+		// TODO
 	}
 
 }

@@ -1,20 +1,31 @@
 package model;
 
+import controller.Engine;
 import controller.GalileoInterfacer;
 
 public abstract class GamePhase {
 	protected PhaseTag mPhaseTag;
 	protected long mDuration, mUpdatePeriod;
-	protected int mMaxScore;
+	protected int mMaxScore, mPlayerOneScore, mPlayerTwoScore;
+	protected GalileoInterfacer mGalileoInterfacer;
+	
+	/** Play this game phase.
+	 */
+	public abstract void play();
 	
 	/**
 	 * @return the relevant player score from the Galileo board.
 	 */
-	public abstract float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer);
+	public abstract float getScoreFromGalileo(int player);
 	
-	/** Run the necessary prompt procedure on the Galileo when this phase begins.
-	 */
-	public abstract void prompt(GalileoInterfacer galileoInterfacer);
+	public void updatePlayerScores() {
+		mPlayerOneScore += 
+				   (int) (getScoreFromGalileo(Engine.PLAYER_ONE)
+				   * getIncrementWeight());
+		mPlayerTwoScore +=
+				   (int) (getScoreFromGalileo(Engine.PLAYER_TWO)
+	               * getIncrementWeight());
+	}
 	
 	/**
 	 * @return The PhaseTag representing this game phase.
@@ -42,6 +53,20 @@ public abstract class GamePhase {
 	 */
 	public int getMaxScore() {
 		return mMaxScore;
+	}
+	
+	/**
+	 * @return player one's current score in this game phase.
+	 */
+	public int getPlayerOneScore() {
+		return mPlayerOneScore;
+	}
+	
+	/**
+	 * @return player two's current score in this game phase.
+	 */
+	public int getPlayerTwoScore() {
+		return mPlayerTwoScore;
 	}
 	
 	/** 
