@@ -10,8 +10,6 @@ public class Engine {
 	private Player mPlayerOne, mPlayerTwo;
 	private GalileoInterfacer mGalileoInterfacer;
 	private MainFrame mMainFrame;
-	private ProgressBar mProgressBarOne, mProgressBarTwo;
-	private TextPrompt mTextPrompt;
 	
 	public Engine() {
 		PhaseTag[] phaseTags = PhaseTag.values();
@@ -26,9 +24,6 @@ public class Engine {
 		mGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
-		mProgressBarOne = new ProgressBar();
-		mProgressBarTwo = new ProgressBar();
-		mTextPrompt = new TextPrompt();
 	}
 	
 	public void run() {
@@ -55,10 +50,10 @@ public class Engine {
 	 * @throws InterruptedException 
 	 */
 	public void welcome() throws InterruptedException {
-		mTextPrompt.putText("WELCOME");
+		mMainFrame.putText("WELCOME");
 		Thread.sleep(2000);
 		for (int i = 3; i > 0; i--) {
-			mTextPrompt.putText(String.valueOf(i));
+			mMainFrame.putText(String.valueOf(i));
 			Thread.sleep(1000);
 		}
 	}
@@ -71,9 +66,11 @@ public class Engine {
 			// get scores periodically and update state
 			while (currTime - startTime < currentPhase.getDuration()) {
 				// [0.0, 1.0] player score is translated based on phase weight
-				mPlayerOne.updateScore((int) (currentPhase.getScoreFromGalileo(mPlayerOne)
-						               * currentPhase.getIncrementWeight()));
-				mPlayerTwo.updateScore((int) (currentPhase.getScoreFromGalileo(mPlayerTwo)
+				mPlayerOne.updateScore(
+						   (int) (currentPhase.getScoreFromGalileo(mPlayerOne, mGalileoInterfacer)
+						   * currentPhase.getIncrementWeight()));
+				mPlayerTwo.updateScore(
+						   (int) (currentPhase.getScoreFromGalileo(mPlayerTwo, mGalileoInterfacer)
 			               * currentPhase.getIncrementWeight()));
 				
 				Thread.sleep(currentPhase.getUpdatePeriod()); // wait for next update period
@@ -87,11 +84,11 @@ public class Engine {
 		int playerOneScore = mPlayerOne.getScore()
 		    , playerTwoScore = mPlayerTwo.getScore();
 		
-		mTextPrompt.putText("Player 1 Score: " + playerOneScore);
+		mMainFrame.putText("Player 1 Score: " + playerOneScore);
 		Thread.sleep(3000);
-		mTextPrompt.putText("Player 2 Score: " + playerTwoScore);
+		mMainFrame.putText("Player 2 Score: " + playerTwoScore);
 		Thread.sleep(3000);
-		mTextPrompt.putText("Player " + (playerOneScore > playerTwoScore ? "1" : "2") + " wins!");
+		mMainFrame.putText("Player " + (playerOneScore > playerTwoScore ? "1" : "2") + " wins!");
 		Thread.sleep(10000);
 	}
 

@@ -25,11 +25,11 @@ public class GalileoInterfacer {
 		return 0.0f;
 	}
 	
-	public float getHighHeartbeatScore(Player player) {
+	public float getHeartbeatHighScore(Player player) {
 		return 0.0f;
 	}
 	
-	public float getLowHeartbeatScore(Player player) {
+	public float getHeartbeatLowScore(Player player) {
 		return 0.0f;
 	}
 	
@@ -38,6 +38,10 @@ public class GalileoInterfacer {
 	}
 	
 	public float getPressureScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getReactionTimeScore(Player player) {
 		return 0.0f;
 	}
 }
