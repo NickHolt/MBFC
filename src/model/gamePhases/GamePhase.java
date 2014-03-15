@@ -1,7 +1,6 @@
 package model.gamePhases;
 
-import model.Player;
-import controller.*;
+import controller.GalileoInterfacer;
 
 public abstract class GamePhase {
 	protected PhaseTag mPhaseTag;
@@ -11,7 +10,7 @@ public abstract class GamePhase {
 	/**
 	 * @return the relevant player score from the Galileo board.
 	 */
-	public abstract float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer);
+	public abstract float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer);
 	
 	/** Run the necessary prompt procedure on the Galileo when this phase begins.
 	 */

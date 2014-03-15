@@ -1,7 +1,6 @@
 package model.gamePhases;
 
 import controller.GalileoInterfacer;
-import model.Player;
 
 public class ConcentrateGamePhase extends GamePhase {
 
@@ -11,7 +10,7 @@ public class ConcentrateGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
+	public float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer) {
 		return galileoInterfacer.getConcentrationScore(player);
 	}
 

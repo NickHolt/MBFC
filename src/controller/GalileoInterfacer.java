@@ -13,35 +13,35 @@ public class GalileoInterfacer {
 	 * where 1.0 represents the optimal performance and 0.0 represents a complete
 	 * lack of participation. 
 	 */
-	public float getScore(Player player) {
+	public float getScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getConcentrationScore(Player player) {
+	public float getConcentrationScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getMeditationScore(Player player) {
+	public float getMeditationScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getHeartbeatHighScore(Player player) {
+	public float getHeartbeatHighScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getHeartbeatLowScore(Player player) {
+	public float getHeartbeatLowScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getBeatScore(Player player) {
+	public float getBeatScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getPressureScore(Player player) {
+	public float getPressureScore(int player) {
 		return 0.0f;
 	}
 	
-	public float getReactionTimeScore(Player player) {
+	public float getReactionTimeScore(int player) {
 		return 0.0f;
 	}
 }

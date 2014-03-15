@@ -1,7 +1,6 @@
 package model.gamePhases;
 
 import controller.GalileoInterfacer;
-import model.Player;
 
 public class HeartRateLowGamePhase extends GamePhase {
 
@@ -11,7 +10,7 @@ public class HeartRateLowGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
+	public float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer) {
 		return galileoInterfacer.getHeartbeatLowScore(player);
 	}
 

@@ -6,8 +6,10 @@ import model.gamePhases.PhaseTag;
 import view.*;
 
 public class Engine {
+	private static final int PLAYER_ONE = 0, PLAYER_TWO = 1;
+	
 	private GamePhase[] mGamePhases;
-	private Player mPlayerOne, mPlayerTwo;
+	private int mPlayerOneScore, mPlayerTwoScore;
 	private GalileoInterfacer mGalileoInterfacer;
 	private MainFrame mMainFrame;
 	
@@ -18,8 +20,8 @@ public class Engine {
 			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i]);
 		}
 		
-		mPlayerOne = new Player();
-		mPlayerTwo = new Player();
+		mPlayerOneScore = 0;
+		mPlayerTwoScore = 0;
 		
 		mGalileoInterfacer = new GalileoInterfacer();
 		
@@ -66,12 +68,12 @@ public class Engine {
 			// get scores periodically and update state
 			while (currTime - startTime < currentPhase.getDuration()) {
 				// [0.0, 1.0] player score is translated based on phase weight
-				mPlayerOne.updateScore(
-						   (int) (currentPhase.getScoreFromGalileo(mPlayerOne, mGalileoInterfacer)
-						   * currentPhase.getIncrementWeight()));
-				mPlayerTwo.updateScore(
-						   (int) (currentPhase.getScoreFromGalileo(mPlayerTwo, mGalileoInterfacer)
-			               * currentPhase.getIncrementWeight()));
+				mPlayerOneScore += 
+						   (int) (currentPhase.getScoreFromGalileo(PLAYER_ONE, mGalileoInterfacer)
+						   * currentPhase.getIncrementWeight());
+				mPlayerTwoScore +=
+						   (int) (currentPhase.getScoreFromGalileo(PLAYER_TWO, mGalileoInterfacer)
+			               * currentPhase.getIncrementWeight());
 				
 				Thread.sleep(currentPhase.getUpdatePeriod()); // wait for next update period
 				
@@ -81,14 +83,11 @@ public class Engine {
 	}
 	
 	public void conclude() throws InterruptedException {
-		int playerOneScore = mPlayerOne.getScore()
-		    , playerTwoScore = mPlayerTwo.getScore();
-		
-		mMainFrame.putText("Player 1 Score: " + playerOneScore);
+		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore);
 		Thread.sleep(3000);
-		mMainFrame.putText("Player 2 Score: " + playerTwoScore);
+		mMainFrame.putText("Player 2 Score: " + mPlayerTwoScore);
 		Thread.sleep(3000);
-		mMainFrame.putText("Player " + (playerOneScore > playerTwoScore ? "1" : "2") + " wins!");
+		mMainFrame.putText("Player " + (mPlayerOneScore > mPlayerTwoScore ? "1" : "2") + " wins!");
 		Thread.sleep(10000);
 	}
 

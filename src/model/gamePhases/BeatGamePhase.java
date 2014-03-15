@@ -1,6 +1,5 @@
 package model.gamePhases;
 
-import model.Player;
 import controller.GalileoInterfacer;
 
 public class BeatGamePhase extends GamePhase {
@@ -11,7 +10,7 @@ public class BeatGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
+	public float getScoreFromGalileo(int player, GalileoInterfacer galileoInterfacer) {
 		return galileoInterfacer.getBeatScore(player);
 	}
 
