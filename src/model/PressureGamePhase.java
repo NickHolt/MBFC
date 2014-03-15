@@ -1,4 +1,4 @@
-package model.gamePhases;
+package model;
 
 import controller.GalileoInterfacer;
 

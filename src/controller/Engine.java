@@ -1,9 +1,8 @@
 package controller;
 
-import model.*;
-import model.gamePhases.GamePhase;
-import model.gamePhases.PhaseTag;
-import view.*;
+import model.GamePhase;
+import model.PhaseTag;
+import view.MainFrame;
 
 public class Engine {
 	private static final int PLAYER_ONE = 0, PLAYER_TWO = 1;
