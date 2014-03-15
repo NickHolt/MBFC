@@ -15,18 +15,12 @@ import javax.swing.JLabel;
  */
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-//	private ProgressBar mProgressBarOne, mProgressBarTwo;
-	private JLabel mProgressBarOne, mProgressBarTwo;
+	private ProgressBar mProgressBarOne, mProgressBarTwo;
 	private JLabel mTextPrompt;
 	
 	public MainFrame() {
-//		mProgressBarOne = new ProgressBar();
-//		mProgressBarTwo = new ProgressBar();
-		
-		mProgressBarOne = new JLabel();
-		mProgressBarOne.setText("BAR1");
-		mProgressBarTwo = new JLabel();
-		mProgressBarTwo.setText("BAR2");
+		mProgressBarOne = new ProgressBar();
+		mProgressBarTwo = new ProgressBar();
 		
 		mTextPrompt = new JLabel();
 	}
@@ -41,20 +35,21 @@ public class MainFrame extends JFrame {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         
-//        c.anchor = GridBagConstraints.LINE_START;
-//        c.fill = GridBagConstraints.BOTH;
         c.weighty = 0.3;
         c.weightx = 1.0;
         c.gridheight = 1;
         c.gridwidth = 1;
         
         c.gridx = 0;
-        c.gridy = 0;
-        add(mProgressBarOne, c);
-        
-        c.gridx = 0;
         c.gridy = 1;
         add(mTextPrompt, c);
+        
+        c.anchor = GridBagConstraints.LINE_START;
+        c.fill = GridBagConstraints.BOTH;
+        
+        c.gridx = 0;
+        c.gridy = 0;
+        add(mProgressBarOne, c);
         
         c.gridx = 0;
         c.gridy = 2;
@@ -65,6 +60,14 @@ public class MainFrame extends JFrame {
 	
 	public void putText(String string) {
 		mTextPrompt.setText(string);
+	}
+	
+	public void setPlayerOnePercentageFill(float percent) {
+		mProgressBarOne.setPercentFilled(percent);
+	}
+	
+	public void setPlayerTwoPercentageFill(float percent) {
+		mProgressBarTwo.setPercentFilled(percent);
 	}
 
 }
