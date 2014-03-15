@@ -33,16 +33,20 @@ public class Engine {
 	public void run() {
 		try {
 			constructGUI();
+			calibrate();
 			welcome();
 			runMainGame();
 			conclude();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public void constructGUI() {
+		// TODO
+	}
+	
+	public void calibrate() throws InterruptedException {
 		// TODO
 	}
 	

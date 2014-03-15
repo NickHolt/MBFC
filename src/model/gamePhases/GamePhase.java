@@ -43,6 +43,7 @@ public abstract class GamePhase {
 	 * @return The GamePhase representative of the TAG.
 	 */
 	public static GamePhase makeGamePhase(PhaseTag tag) {
+		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
 				return new ConcentrateGamePhase();

@@ -16,4 +16,28 @@ public class GalileoInterfacer {
 	public float getScore(Player player) {
 		return 0.0f;
 	}
+	
+	public float getConcentrationScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getMeditationScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getHighHeartbeatScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getLowHeartbeatScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getBeatScore(Player player) {
+		return 0.0f;
+	}
+	
+	public float getPressureScore(Player player) {
+		return 0.0f;
+	}
 }
