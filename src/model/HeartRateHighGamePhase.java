@@ -1,14 +1,12 @@
 package model;
 
-import view.MainFrame;
-import controller.GalileoInterfacer;
+import controller.Engine;
 
 
 public class HeartRateHighGamePhase extends GamePhase {
 
-	public HeartRateHighGamePhase(Player playerOne, Player playerTwo,
-            GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
+	public HeartRateHighGamePhase(Player playerOne, Player playerTwo, Engine engine) {
+		super(playerOne, playerTwo, engine);
 		
 		this.mPhaseTag = PhaseTag.HEARTRATE_HIGH;
 		this.mDuration = 10000;
@@ -19,13 +17,13 @@ public class HeartRateHighGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mGalileoInterfacer.getHeartbeatHighScore(player);
+		return mEngine.getGalileoInterfacer().getHeartbeatHighScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		mMainFrame.putText("High Heart Rate!");
+		mEngine.getMainFrame().putText("High Heart Rate!");
 		
 	}
 

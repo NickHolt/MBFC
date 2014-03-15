@@ -1,14 +1,12 @@
 package model;
 
-import view.MainFrame;
-import controller.GalileoInterfacer;
+import controller.Engine;
 
 
 public class BeatGamePhase extends GamePhase {
 	
-	public BeatGamePhase(Player playerOne, Player playerTwo,
-			              GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
+	public BeatGamePhase(Player playerOne, Player playerTwo, Engine engine) {
+		super(playerOne, playerTwo, engine);
 		
 		this.mPhaseTag = PhaseTag.BEAT;
 		this.mDuration = 10000;
@@ -19,12 +17,12 @@ public class BeatGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mGalileoInterfacer.getBeatScore(player);
+		return mEngine.getGalileoInterfacer().getBeatScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		mMainFrame.putText("Keep the Beat!");
+		mEngine.getMainFrame().putText("Keep the Beat!");
 	}
 }

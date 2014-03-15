@@ -1,7 +1,6 @@
 package model;
 
-import view.MainFrame;
-import controller.GalileoInterfacer;
+import controller.Engine;
 
 /** A phase in a game of Mind Body Fitness Challenge is a particular challenge that both
  *  players face for a set period of time. Each player will accumulate a score specific to 
@@ -16,17 +15,17 @@ import controller.GalileoInterfacer;
  * @author nickholt
  */
 public abstract class GamePhase {
+	/* The unique PhaseTag describing this GamePhase */
 	protected PhaseTag mPhaseTag;
+	/* The duration of the game and period by which to update player scores. */
 	protected long mDuration, mUpdatePeriod;
+	/* The maximum score achievable in this game phase. */
 	protected int mMaxScore;
 	protected Player mPlayerOne, mPlayerTwo;
-	protected GalileoInterfacer mGalileoInterfacer;
-	protected MainFrame mMainFrame;
+	protected Engine mEngine;
 	
-	public GamePhase(Player playerOne, Player playerTwo, GalileoInterfacer galileoInterfacer
-			        , MainFrame mainFrame) {
-		mGalileoInterfacer = galileoInterfacer;
-		mMainFrame = mainFrame;
+	public GamePhase(Player playerOne, Player playerTwo, Engine engine) {
+		mEngine = engine;
 		
 		mPlayerOne = playerOne;
 		mPlayerOne.setCurrentScore(0);
@@ -49,7 +48,7 @@ public abstract class GamePhase {
 						                         * getIncrementWeight()));
 		
 		mPlayerTwo.incrementCurrentScore((int) (getScoreFromGalileo(mPlayerTwo)
-                * getIncrementWeight()));
+                                                 * getIncrementWeight()));
 	}
 	
 	/**
@@ -81,8 +80,7 @@ public abstract class GamePhase {
 	}
 	
 	/** 
-	 * @return the weight by which to multiply the player's score on each
-	 * update.
+	 * @return the maximum possible score achievable during one update increment.
 	 */
 	public float getIncrementWeight() {
 		return (float) getUpdatePeriod() / (float) getDuration()
@@ -96,24 +94,23 @@ public abstract class GamePhase {
 	public static GamePhase makeGamePhase(PhaseTag tag,
 											Player playerOne,
 											Player playerTwo,
-			                                GalileoInterfacer galileoInterfacer,
-			                                MainFrame mainFrame) {
+			                                Engine engine) {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
-				return new ConcentrateGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new ConcentrateGamePhase(playerOne, playerTwo, engine);
 			case MEDITATE: 
-				return new MeditateGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new MeditateGamePhase(playerOne, playerTwo, engine);
 			case HEARTRATE_HIGH:
-				return new HeartRateHighGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new HeartRateHighGamePhase(playerOne, playerTwo, engine);
 			case HEARTRATE_LOW:
-				return new HeartRateLowGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new HeartRateLowGamePhase(playerOne, playerTwo, engine);
 			case BEAT:
-				return new BeatGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new BeatGamePhase(playerOne, playerTwo, engine);
 			case REACTION_TIME:
-				return new ReactionTimeGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new ReactionTimeGamePhase(playerOne, playerTwo, engine);
 			case PRESSURE:
-				return new PressureGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
+				return new PressureGamePhase(playerOne, playerTwo, engine);
 			default:
 				return null;
 		}

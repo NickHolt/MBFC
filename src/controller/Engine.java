@@ -13,6 +13,8 @@ import model.Player;
 public class Engine {
 	/* The two players of this game. */
 	private Player mPlayerOne, mPlayerTwo;
+	/* The maximum achievable score in a full game. */
+	private int mMaxScore;
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
 	/* The interface between the game code and the Galileo Board. */
@@ -27,16 +29,15 @@ public class Engine {
 		
 		PhaseTag[] phaseTags = PhaseTag.values();
 		mGamePhases = new GamePhase[phaseTags.length];
-		int maxScore = 0;
+		mMaxScore = 0;
 		// Generate game phases
 		for (int i = 0; i < mGamePhases.length; i++) {
-			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mPlayerOne, mPlayerTwo, 
-					                                 mGalileoInterfacer, mMainFrame);
-			maxScore += mGamePhases[i].getMaxScore();
+			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mPlayerOne, mPlayerTwo, this);
+			mMaxScore += mGamePhases[i].getMaxScore();
 		}
 		
-		mPlayerOne = new Player(maxScore);
-		mPlayerTwo = new Player(maxScore);
+		mPlayerOne = new Player();
+		mPlayerTwo = new Player();
 	}
 	
 	/** Run a game of Mind Body Fitness Challenge. This method alone need be called to initiate
@@ -48,7 +49,13 @@ public class Engine {
 			welcome();
 			/* Run the game phases */
 			for (GamePhase currentPhase : mGamePhases) {
+				mPlayerOne.setCurrentScore(0);
+				mPlayerTwo.setCurrentScore(0);
+				
 				currentPhase.play();
+				
+				mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
+				mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
 			}
 			conclude();
 		} catch (InterruptedException e) {
@@ -83,5 +90,21 @@ public class Engine {
 	 */
 	public static void main(String[] args) {
 		new Engine().run();
+	}
+
+	public GalileoInterfacer getGalileoInterfacer() {
+		return mGalileoInterfacer;
+	}
+	
+	public MainFrame getMainFrame() {
+		return mMainFrame;
+	}
+
+	public int getMaxScore() {
+		return mMaxScore;
+	}
+
+	public void setMaxScore(int maxScore) {
+		mMaxScore = maxScore;
 	}
 }

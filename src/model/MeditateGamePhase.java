@@ -1,14 +1,12 @@
 package model;
 
-import view.MainFrame;
-import controller.GalileoInterfacer;
+import controller.Engine;
 
 
 public class MeditateGamePhase extends GamePhase {
 
-	public MeditateGamePhase(Player playerOne, Player playerTwo,
-            GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
+	public MeditateGamePhase(Player playerOne, Player playerTwo, Engine engine) {
+		super(playerOne, playerTwo, engine);
 		
 		this.mPhaseTag = PhaseTag.MEDITATE;
 		this.mDuration = 10000;
@@ -19,13 +17,12 @@ public class MeditateGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mGalileoInterfacer.getMeditationScore(player);
+		return mEngine.getGalileoInterfacer().getMeditationScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		mMainFrame.putText("Meditate!");
 		
 	}
 

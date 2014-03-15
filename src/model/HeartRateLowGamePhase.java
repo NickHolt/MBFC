@@ -1,14 +1,12 @@
 package model;
 
-import view.MainFrame;
-import controller.GalileoInterfacer;
+import controller.Engine;
 
 
 public class HeartRateLowGamePhase extends GamePhase {
 
-	public HeartRateLowGamePhase(Player playerOne, Player playerTwo,
-            GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
+	public HeartRateLowGamePhase(Player playerOne, Player playerTwo, Engine engine) {
+		super(playerOne, playerTwo, engine);
 		
 		this.mPhaseTag = PhaseTag.HEARTRATE_LOW;
 		this.mDuration = 10000;
@@ -19,13 +17,13 @@ public class HeartRateLowGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mGalileoInterfacer.getHeartbeatLowScore(player);
+		return mEngine.getGalileoInterfacer().getHeartbeatLowScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		mMainFrame.putText("Low Heart Rate!");
+		mEngine.getMainFrame().putText("Low Heart Rate!");
 		
 	}
 
