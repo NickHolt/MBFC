@@ -50,8 +50,7 @@ public abstract class GamePhase {
 	 * update.
 	 */
 	public float getIncrementWeight() {
-		return (float) getUpdatePeriod() 
-	          / (float) getDuration()
+		return (float) getUpdatePeriod() / (float) getDuration()
 	          * (float) getMaxScore();
 	}
 	
