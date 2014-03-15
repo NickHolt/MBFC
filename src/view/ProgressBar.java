@@ -1,5 +1,7 @@
 package view;
 
+import javax.swing.JPanel;
+
 /** A GUI component that graphically displays the progress of the player. The percentage of the
  *  bar that's filled is equal to the global score of the player divided by the maximum possible score.
  *  
@@ -7,6 +9,6 @@ package view;
  * 
  * @author nickholt
  */
-public class ProgressBar {
+public class ProgressBar extends JPanel {
 
 }

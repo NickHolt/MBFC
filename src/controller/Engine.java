@@ -42,23 +42,19 @@ public class Engine {
 	 */
 	public void run() {
 		try {
-			constructGUI();
+			mMainFrame.initialize();
 			welcome();
-			runMainGame();
-			conclude();
+//			runMainGame();
+//			conclude();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void constructGUI() {
-		// TODO
-	}
-	
 	/** Displays a welcome message and counts down from 3.
 	 */
 	private void welcome() throws InterruptedException {
-		mMainFrame.putText("WELCOME");
+		mMainFrame.putText("Welcome!");
 		Thread.sleep(2000);
 		for (int i = 3; i > 0; i--) {
 			mMainFrame.putText(String.valueOf(i));
@@ -81,13 +77,12 @@ public class Engine {
 	 */
 	private void conclude() throws InterruptedException {
 		mMainFrame.putText("Game over!");
-		Thread.sleep(3000);
+		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore);
-		Thread.sleep(3000);
+		Thread.sleep(500);
 		mMainFrame.putText("Player 2 Score: " + mPlayerTwoScore);
-		Thread.sleep(3000);
+		Thread.sleep(500);
 		mMainFrame.putText("Player " + (mPlayerOneScore > mPlayerTwoScore ? "1" : "2") + " wins!");
-		Thread.sleep(10000);
 	}
 	
 	/** Entry point for a new game of Mind Body Fitness Challenge.
