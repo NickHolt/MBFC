@@ -11,7 +11,7 @@ public class MeditateGamePhase extends GamePhase {
 	}
 
 	@Override
-	public int getDuration() {
+	public long getDuration() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -23,7 +23,7 @@ public class MeditateGamePhase extends GamePhase {
 	}
 
 	@Override
-	public int getUpdatePeriod() {
+	public long getUpdatePeriod() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
