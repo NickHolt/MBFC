@@ -23,6 +23,9 @@ public class Engine {
 	private MainFrame mMainFrame;
 	
 	public Engine() {
+		mPlayerOne = new Player();
+		mPlayerTwo = new Player();
+		
 		mGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
@@ -35,9 +38,6 @@ public class Engine {
 			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mPlayerOne, mPlayerTwo, this);
 			mMaxScore += mGamePhases[i].getMaxScore();
 		}
-		
-		mPlayerOne = new Player();
-		mPlayerTwo = new Player();
 	}
 	
 	/** Run a game of Mind Body Fitness Challenge. This method alone need be called to initiate
