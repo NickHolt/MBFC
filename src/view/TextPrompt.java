@@ -2,7 +2,7 @@ package view;
 
 public class TextPrompt {
 	
-	public void putText() {
+	public void putText(String message) {
 		// TODO
 	}
 

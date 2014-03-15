@@ -9,5 +9,5 @@ public enum PhaseTag {
 	MEDITATE,
 	HEARTRATE_HIGH,
 	HEARTRATE_LOW,
-	BALANCE, // etc...
+	KEEP_THE_BEAT, // etc...
 }
