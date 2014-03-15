@@ -3,16 +3,16 @@ package model.gamePhases;
 import controller.GalileoInterfacer;
 import model.Player;
 
-public class MeditateGamePhase extends GamePhase {
+public class ReactionTimeGamePhase extends GamePhase {
 
-	public MeditateGamePhase() {
-		this.mPhaseTag = PhaseTag.MEDITATE;
+	public ReactionTimeGamePhase() {
+		this.mPhaseTag = PhaseTag.REACTION_TIME;
 		// TODO
 	}
 
 	@Override
 	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
-		return galileoInterfacer.getMeditationScore(player);
+		return galileoInterfacer.getReactionTimeScore(player);
 	}
 
 	@Override

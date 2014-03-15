@@ -1,38 +1,24 @@
 package model.gamePhases;
 
-import model.PhaseTag;
+import controller.GalileoInterfacer;
 import model.Player;
 
 public class HeartRateHighGamePhase extends GamePhase {
 
-	@Override
-	public PhaseTag getPhaseTag() {
-		// TODO Auto-generated method stub
-		return null;
+	public HeartRateHighGamePhase() {
+		this.mPhaseTag = PhaseTag.HEARTRATE_HIGH;
+		// TODO
 	}
 
 	@Override
-	public long getDuration() {
-		// TODO Auto-generated method stub
-		return 0;
+	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
+		return galileoInterfacer.getHeartbeatHighScore(player);
 	}
 
 	@Override
-	public int getMaxScore() {
+	public void prompt(GalileoInterfacer galileoInterfacer) {
 		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long getUpdatePeriod() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float getScoreFromGalileo(Player player) {
-		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 
 }

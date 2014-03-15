@@ -1,18 +1,18 @@
 package model.gamePhases;
 
-import controller.GalileoInterfacer;
 import model.Player;
+import controller.GalileoInterfacer;
 
-public class MeditateGamePhase extends GamePhase {
-
-	public MeditateGamePhase() {
-		this.mPhaseTag = PhaseTag.MEDITATE;
+public class BeatGamePhase extends GamePhase {
+	
+	public BeatGamePhase() {
+		this.mPhaseTag = PhaseTag.BEAT;
 		// TODO
 	}
 
 	@Override
 	public float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer) {
-		return galileoInterfacer.getMeditationScore(player);
+		return galileoInterfacer.getBeatScore(player);
 	}
 
 	@Override

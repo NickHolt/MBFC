@@ -1,32 +1,49 @@
 package model.gamePhases;
 
-import model.*;
+import model.Player;
+import controller.*;
 
 public abstract class GamePhase {
+	protected PhaseTag mPhaseTag;
+	protected long mDuration, mUpdatePeriod;
+	protected int mMaxScore;
+	
+	/**
+	 * @return the relevant player score from the Galileo board.
+	 */
+	public abstract float getScoreFromGalileo(Player player, GalileoInterfacer galileoInterfacer);
+	
+	/** Run the necessary prompt procedure on the Galileo when this phase begins.
+	 */
+	public abstract void prompt(GalileoInterfacer galileoInterfacer);
+	
 	/**
 	 * @return The PhaseTag representing this game phase.
 	 */
-	public abstract PhaseTag getPhaseTag();
+	public PhaseTag getPhaseTag() {
+		return mPhaseTag;
+	}
 	
 	/**
 	 * @return The duration in millis of this game phase.
 	 */
-	public abstract long getDuration();
+	public long getDuration() {
+		return mDuration;
+	}
 	
 	/**
 	 * @return The period in millis to periodically update the player scores.
 	 */
-	public abstract long getUpdatePeriod();
+	public long getUpdatePeriod() {
+		return mUpdatePeriod;
+	}
 	
 	/**
 	 * @return The maximum achievable score of this game phase.
 	 */
-	public abstract int getMaxScore();
-	
-	/**
-	 * @return the relevent player score from the Galileo board.
-	 */
-	public abstract float getScoreFromGalileo(Player player);
+	public int getMaxScore() {
+		return mMaxScore;
+	}
 	
 	/** 
 	 * @return the weight by which to multiply the player's score on each
@@ -53,8 +70,12 @@ public abstract class GamePhase {
 				return new HeartRateHighGamePhase();
 			case HEARTRATE_LOW:
 				return new HeartRateLowGamePhase();
-			case KEEP_THE_BEAT:
-				return new KeepTheBeatGamePhase();
+			case BEAT:
+				return new BeatGamePhase();
+			case REACTION_TIME:
+				return new ReactionTimeGamePhase();
+			case PRESSURE:
+				return new PressureGamePhase();
 			default:
 				return null;
 		}
