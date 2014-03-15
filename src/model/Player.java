@@ -1,10 +1,13 @@
 package model;
 
 public class Player {
-	private int mGlobalScore, mCurrentScore;
+	/* The score values for a Player. Note that each Player may have a different
+	 * maximum achievable score to allow for handicaps. */
+	private int mGlobalScore, mCurrentScore, mMaxScore;
 	
-	public Player() {
+	public Player(int maxScore) {
 		mGlobalScore = mCurrentScore = 0;
+		mMaxScore = maxScore;
 	}
 
 	public int getGlobalScore() {
@@ -25,6 +28,14 @@ public class Player {
 	
 	public void incrementCurrentScore(int amount) {
 		mCurrentScore += amount;
+	}
+
+	public int getMaxScore() {
+		return mMaxScore;
+	}
+
+	public void setMaxScore(int maxScore) {
+		mMaxScore = maxScore;
 	}
 
 }

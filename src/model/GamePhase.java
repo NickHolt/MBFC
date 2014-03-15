@@ -1,7 +1,6 @@
 package model;
 
 import view.MainFrame;
-import controller.Engine;
 import controller.GalileoInterfacer;
 
 /** A phase in a game of Mind Body Fitness Challenge is a particular challenge that both

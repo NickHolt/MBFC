@@ -15,31 +15,28 @@ public class Engine {
 	private Player mPlayerOne, mPlayerTwo;
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
-	/* The maximum possible score. */
-	private int mMaxScore;
 	/* The interface between the game code and the Galileo Board. */
 	private GalileoInterfacer mGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
 	public Engine() {
-		mPlayerOne = new Player();
-		mPlayerTwo = new Player();
-		
 		mGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
 		
 		PhaseTag[] phaseTags = PhaseTag.values();
 		mGamePhases = new GamePhase[phaseTags.length];
-		mMaxScore = 0;
+		int maxScore = 0;
+		// Generate game phases
 		for (int i = 0; i < mGamePhases.length; i++) {
 			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mPlayerOne, mPlayerTwo, 
 					                                 mGalileoInterfacer, mMainFrame);
-			mMaxScore += mGamePhases[i].getMaxScore();
+			maxScore += mGamePhases[i].getMaxScore();
 		}
 		
-		
+		mPlayerOne = new Player(maxScore);
+		mPlayerTwo = new Player(maxScore);
 	}
 	
 	/** Run a game of Mind Body Fitness Challenge. This method alone need be called to initiate
@@ -49,7 +46,10 @@ public class Engine {
 		try {
 			mMainFrame.initialize();
 			welcome();
-			runMainGame();
+			/* Run the game phases */
+			for (GamePhase currentPhase : mGamePhases) {
+				currentPhase.play();
+			}
 			conclude();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -64,18 +64,6 @@ public class Engine {
 		for (int i = 3; i > 0; i--) {
 			mMainFrame.putText(String.valueOf(i));
 			Thread.sleep(1000);
-		}
-	}
-	
-	/** Cycles through the game phases and plays each individually.
-	 *  Global scores are updated at the end of each phase. 
-	 */
-	private void runMainGame() throws InterruptedException {
-		for (GamePhase currentPhase : mGamePhases) {
-			currentPhase.play();
-			
-			// TODO phases should update scores, not Engine
-			mMainFrame.update(mPlayerOne, mPlayerTwo, mMaxScore);
 		}
 	}
 	
