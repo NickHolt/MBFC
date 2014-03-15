@@ -1,6 +1,7 @@
 package model.gamePhases;
 
 import model.PhaseTag;
+import model.Player;
 
 public class ConcentrateGamePhase extends GamePhase {
 
@@ -24,6 +25,12 @@ public class ConcentrateGamePhase extends GamePhase {
 
 	@Override
 	public long getUpdatePeriod() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getScoreFromGalileo(Player player) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

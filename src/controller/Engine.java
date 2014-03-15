@@ -58,19 +58,20 @@ public class Engine {
 		}
 	}
 	
-	public void runMainGame() {
+	public void runMainGame() throws InterruptedException {
 		for (GamePhase currentPhase : mGamePhases) {
 			long currTime, 
 			      startTime = currTime = System.currentTimeMillis();
-			
-			
-			
+
+			// get scores periodically and update state
 			while (currTime - startTime < currentPhase.getDuration()) {
-				// TODO
-				float playerOneScore = mGalileoInterfacer.getScore(mPlayerOne)
-						, playerTwoScore = mGalileoInterfacer.getScore(mPlayerTwo);
-				//mPlayerOne.updateScore(updateAmount)
+				// [0.0, 1.0] player score is translated based on phase weight
+				mPlayerOne.updateScore((int) (currentPhase.getScoreFromGalileo(mPlayerOne)
+						               * currentPhase.getIncrementWeight()));
+				mPlayerTwo.updateScore((int) (currentPhase.getScoreFromGalileo(mPlayerTwo)
+			               * currentPhase.getIncrementWeight()));
 				
+				Thread.sleep(currentPhase.getUpdatePeriod()); // wait for next update period
 				
 				currTime = System.currentTimeMillis();
 			}

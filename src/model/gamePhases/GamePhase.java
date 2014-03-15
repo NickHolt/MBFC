@@ -1,6 +1,6 @@
 package model.gamePhases;
 
-import model.PhaseTag;
+import model.*;
 
 public abstract class GamePhase {
 	/**
@@ -22,6 +22,11 @@ public abstract class GamePhase {
 	 * @return The maximum achievable score of this game phase.
 	 */
 	public abstract int getMaxScore();
+	
+	/**
+	 * @return the relevent player score from the Galileo board.
+	 */
+	public abstract float getScoreFromGalileo(Player player);
 	
 	/** 
 	 * @return the weight by which to multiply the player's score on each
