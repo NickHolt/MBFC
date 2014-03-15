@@ -1,5 +1,6 @@
 package model;
 
+import view.MainFrame;
 import controller.Engine;
 import controller.GalileoInterfacer;
 
@@ -19,6 +20,12 @@ public abstract class GamePhase {
 	protected long mDuration, mUpdatePeriod;
 	protected int mMaxScore, mPlayerOneScore, mPlayerTwoScore;
 	protected GalileoInterfacer mGalileoInterfacer;
+	protected MainFrame mMainFrame;
+	
+	public GamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		mGalileoInterfacer = galileoInterfacer;
+		mMainFrame = mainFrame;
+	}
 	
 	/** Play this game phase.
 	 */
@@ -93,23 +100,25 @@ public abstract class GamePhase {
 	 * @param tag the PhaseTag of the desired GamePhase.
 	 * @return The GamePhase representative of the TAG.
 	 */
-	public static GamePhase makeGamePhase(PhaseTag tag, GalileoInterfacer galileoInterfacer) {
+	public static GamePhase makeGamePhase(PhaseTag tag, 
+			                                GalileoInterfacer galileoInterfacer,
+			                                MainFrame mainFrame) {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
-				return new ConcentrateGamePhase(galileoInterfacer);
+				return new ConcentrateGamePhase(galileoInterfacer, mainFrame);
 			case MEDITATE: 
-				return new MeditateGamePhase(galileoInterfacer);
+				return new MeditateGamePhase(galileoInterfacer, mainFrame);
 			case HEARTRATE_HIGH:
-				return new HeartRateHighGamePhase(galileoInterfacer);
+				return new HeartRateHighGamePhase(galileoInterfacer, mainFrame);
 			case HEARTRATE_LOW:
-				return new HeartRateLowGamePhase(galileoInterfacer);
+				return new HeartRateLowGamePhase(galileoInterfacer, mainFrame);
 			case BEAT:
-				return new BeatGamePhase(galileoInterfacer);
+				return new BeatGamePhase(galileoInterfacer, mainFrame);
 			case REACTION_TIME:
-				return new ReactionTimeGamePhase(galileoInterfacer);
+				return new ReactionTimeGamePhase(galileoInterfacer, mainFrame);
 			case PRESSURE:
-				return new PressureGamePhase(galileoInterfacer);
+				return new PressureGamePhase(galileoInterfacer, mainFrame);
 			default:
 				return null;
 		}

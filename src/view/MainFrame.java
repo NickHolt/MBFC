@@ -58,6 +58,12 @@ public class MainFrame extends JFrame {
         setSize(1000, 300);
 	}
 	
+	public void update() {
+		mTextPrompt.repaint();
+		mProgressBarOne.repaint();
+		mProgressBarTwo.repaint();
+	}
+	
 	public void putText(String string) {
 		mTextPrompt.setText(string);
 	}

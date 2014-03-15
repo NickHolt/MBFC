@@ -1,16 +1,18 @@
 package model;
 
+import view.MainFrame;
 import controller.GalileoInterfacer;
 
 
 public class BeatGamePhase extends GamePhase {
 	
-	public BeatGamePhase(GalileoInterfacer galileoInterfacer) {
+	public BeatGamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		super(galileoInterfacer, mainFrame);
+		
 		this.mPhaseTag = PhaseTag.BEAT;
 		this.mDuration = 10000;
 		this.mUpdatePeriod = 1000;
 		this.mMaxScore = 100;
-		this.mGalileoInterfacer = galileoInterfacer;
 		// TODO
 	}
 
@@ -24,6 +26,4 @@ public class BeatGamePhase extends GamePhase {
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

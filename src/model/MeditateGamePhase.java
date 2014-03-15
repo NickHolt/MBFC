@@ -1,16 +1,18 @@
 package model;
 
+import view.MainFrame;
 import controller.GalileoInterfacer;
 
 
 public class MeditateGamePhase extends GamePhase {
 
-	public MeditateGamePhase(GalileoInterfacer galileoInterfacer) {
+	public MeditateGamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		super(galileoInterfacer, mainFrame);
+		
 		this.mPhaseTag = PhaseTag.MEDITATE;
 		this.mDuration = 10000;
 		this.mUpdatePeriod = 1000;
 		this.mMaxScore = 100;
-		this.mGalileoInterfacer = galileoInterfacer;
 		// TODO
 	}
 

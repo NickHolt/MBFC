@@ -16,7 +16,7 @@ public class Engine {
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
 	/* The global scores of the two players. */
-	private int mPlayerOneScore, mPlayerTwoScore;
+	private int mPlayerOneScore, mPlayerTwoScore, mMaxScore;
 	/* The interface between the game code and the Galileo Board. */
 	private GalileoInterfacer mGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
@@ -25,8 +25,10 @@ public class Engine {
 	public Engine() {
 		PhaseTag[] phaseTags = PhaseTag.values();
 		mGamePhases = new GamePhase[phaseTags.length];
+		mMaxScore = 0;
 		for (int i = 0; i < mGamePhases.length; i++) {
-			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mGalileoInterfacer);
+			mGamePhases[i] = GamePhase.makeGamePhase(phaseTags[i], mGalileoInterfacer, mMainFrame);
+			mMaxScore += mGamePhases[i].getMaxScore();
 		}
 		
 		mPlayerOneScore = 0;
@@ -44,8 +46,8 @@ public class Engine {
 		try {
 			mMainFrame.initialize();
 			welcome();
-//			runMainGame();
-//			conclude();
+			runMainGame();
+			conclude();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -68,8 +70,13 @@ public class Engine {
 	private void runMainGame() throws InterruptedException {
 		for (GamePhase currentPhase : mGamePhases) {
 			currentPhase.play();
+			
 			mPlayerOneScore += currentPhase.getPlayerOneScore();
 			mPlayerTwoScore += currentPhase.getPlayerTwoScore();
+			
+			mMainFrame.setPlayerOnePercentageFill((float) mPlayerOneScore / (float) mMaxScore);
+			mMainFrame.setPlayerTwoPercentageFill((float) mPlayerTwoScore / (float) mMaxScore);
+			mMainFrame.update();
 		}
 	}
 	
@@ -78,10 +85,9 @@ public class Engine {
 	private void conclude() throws InterruptedException {
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
-		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore);
-		Thread.sleep(500);
-		mMainFrame.putText("Player 2 Score: " + mPlayerTwoScore);
-		Thread.sleep(500);
+		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore 
+				+ "Player 2 Score: " + mPlayerTwoScore);
+		Thread.sleep(2000);
 		mMainFrame.putText("Player " + (mPlayerOneScore > mPlayerTwoScore ? "1" : "2") + " wins!");
 	}
 	
