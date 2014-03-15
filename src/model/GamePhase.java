@@ -11,38 +11,46 @@ import controller.GalileoInterfacer;
  *  An entire MBFC playthrough involved progressing through several GamePhases.
  *  
  *  GamePhases have direct access to the GalileoBoard and are responsible for prompting the 
- *  user as necessary.
+ *  user as necessary. A GamePhase is also responsible for reporting the update in player
+ *  score to the Galileo so the progress bars can be updates accordingly.
  * 
  * @author nickholt
  */
 public abstract class GamePhase {
 	protected PhaseTag mPhaseTag;
 	protected long mDuration, mUpdatePeriod;
-	protected int mMaxScore, mPlayerOneScore, mPlayerTwoScore;
+	protected int mMaxScore;
+	protected Player mPlayerOne, mPlayerTwo;
 	protected GalileoInterfacer mGalileoInterfacer;
 	protected MainFrame mMainFrame;
 	
-	public GamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+	public GamePhase(Player playerOne, Player playerTwo, GalileoInterfacer galileoInterfacer
+			        , MainFrame mainFrame) {
 		mGalileoInterfacer = galileoInterfacer;
 		mMainFrame = mainFrame;
+		
+		mPlayerOne = playerOne;
+		mPlayerOne.setCurrentScore(0);
+		
+		mPlayerTwo = playerTwo;
+		mPlayerTwo.setCurrentScore(0);
 	}
 	
 	/** Play this game phase.
 	 */
-	public abstract void play();
+	public abstract void play() throws InterruptedException;
 	
 	/**
 	 * @return the relevant player score from the Galileo board.
 	 */
-	public abstract float getScoreFromGalileo(int player);
+	public abstract float getScoreFromGalileo(Player player);
 	
-	public void updatePlayerScores() {
-		mPlayerOneScore += 
-				   (int) (getScoreFromGalileo(Engine.PLAYER_ONE)
-				   * getIncrementWeight());
-		mPlayerTwoScore +=
-				   (int) (getScoreFromGalileo(Engine.PLAYER_TWO)
-	               * getIncrementWeight());
+	public void incrementPlayerScores() {
+		mPlayerOne.incrementCurrentScore((int) (getScoreFromGalileo(mPlayerOne)
+						                         * getIncrementWeight()));
+		
+		mPlayerTwo.incrementCurrentScore((int) (getScoreFromGalileo(mPlayerTwo)
+                * getIncrementWeight()));
 	}
 	
 	/**
@@ -73,20 +81,6 @@ public abstract class GamePhase {
 		return mMaxScore;
 	}
 	
-	/**
-	 * @return player one's current score in this game phase.
-	 */
-	public int getPlayerOneScore() {
-		return mPlayerOneScore;
-	}
-	
-	/**
-	 * @return player two's current score in this game phase.
-	 */
-	public int getPlayerTwoScore() {
-		return mPlayerTwoScore;
-	}
-	
 	/** 
 	 * @return the weight by which to multiply the player's score on each
 	 * update.
@@ -100,25 +94,27 @@ public abstract class GamePhase {
 	 * @param tag the PhaseTag of the desired GamePhase.
 	 * @return The GamePhase representative of the TAG.
 	 */
-	public static GamePhase makeGamePhase(PhaseTag tag, 
+	public static GamePhase makeGamePhase(PhaseTag tag,
+											Player playerOne,
+											Player playerTwo,
 			                                GalileoInterfacer galileoInterfacer,
 			                                MainFrame mainFrame) {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
-				return new ConcentrateGamePhase(galileoInterfacer, mainFrame);
+				return new ConcentrateGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case MEDITATE: 
-				return new MeditateGamePhase(galileoInterfacer, mainFrame);
+				return new MeditateGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case HEARTRATE_HIGH:
-				return new HeartRateHighGamePhase(galileoInterfacer, mainFrame);
+				return new HeartRateHighGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case HEARTRATE_LOW:
-				return new HeartRateLowGamePhase(galileoInterfacer, mainFrame);
+				return new HeartRateLowGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case BEAT:
-				return new BeatGamePhase(galileoInterfacer, mainFrame);
+				return new BeatGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case REACTION_TIME:
-				return new ReactionTimeGamePhase(galileoInterfacer, mainFrame);
+				return new ReactionTimeGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			case PRESSURE:
-				return new PressureGamePhase(galileoInterfacer, mainFrame);
+				return new PressureGamePhase(playerOne, playerTwo, galileoInterfacer, mainFrame);
 			default:
 				return null;
 		}

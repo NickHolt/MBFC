@@ -6,8 +6,9 @@ import controller.GalileoInterfacer;
 
 public class PressureGamePhase extends GamePhase {
 
-	public PressureGamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(galileoInterfacer, mainFrame);
+	public PressureGamePhase(Player playerOne, Player playerTwo,
+            GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
 		
 		this.mPhaseTag = PhaseTag.PRESSURE;
 		this.mDuration = 10000;
@@ -17,13 +18,14 @@ public class PressureGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(int player) {
+	public float getScoreFromGalileo(Player player) {
 		return mGalileoInterfacer.getPressureScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
+		mMainFrame.putText("Match the Intensity! Hit the pad!");
 		
 	}
 

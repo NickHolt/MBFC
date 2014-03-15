@@ -3,6 +3,7 @@ package controller;
 import model.GamePhase;
 import model.PhaseTag;
 import view.MainFrame;
+import model.Player;
 
 /** The Engine controlling the software behind a game of Mind Body Fitness Challenge. It is the Engine's
  * job to maintain state such as player scores, and orchestrate the different phases of the game.
@@ -10,19 +11,25 @@ import view.MainFrame;
  * @author nickholt
  */
 public class Engine {
-	/* Constants representing the identities of both players. */
-	public static final int PLAYER_ONE = 0, PLAYER_TWO = 1;
-	
+	/* The two players of this game. */
+	private Player mPlayerOne, mPlayerTwo;
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
-	/* The global scores of the two players. */
-	private int mPlayerOneScore, mPlayerTwoScore, mMaxScore;
+	/* The maximum possible score. */
+	private int mMaxScore;
 	/* The interface between the game code and the Galileo Board. */
 	private GalileoInterfacer mGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
 	public Engine() {
+		mPlayerOne = new Player();
+		mPlayerTwo = new Player();
+		
+		mGalileoInterfacer = new GalileoInterfacer();
+		
+		mMainFrame = new MainFrame();
+		
 		PhaseTag[] phaseTags = PhaseTag.values();
 		mGamePhases = new GamePhase[phaseTags.length];
 		mMaxScore = 0;
@@ -31,12 +38,7 @@ public class Engine {
 			mMaxScore += mGamePhases[i].getMaxScore();
 		}
 		
-		mPlayerOneScore = 0;
-		mPlayerTwoScore = 0;
 		
-		mGalileoInterfacer = new GalileoInterfacer();
-		
-		mMainFrame = new MainFrame();
 	}
 	
 	/** Run a game of Mind Body Fitness Challenge. This method alone need be called to initiate
@@ -71,6 +73,8 @@ public class Engine {
 		for (GamePhase currentPhase : mGamePhases) {
 			currentPhase.play();
 			
+			// TODO phases should update scores, not Engine
+			
 			mPlayerOneScore += currentPhase.getPlayerOneScore();
 			mPlayerTwoScore += currentPhase.getPlayerTwoScore();
 			
@@ -85,10 +89,11 @@ public class Engine {
 	private void conclude() throws InterruptedException {
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
-		mMainFrame.putText("Player 1 Score: " + mPlayerOneScore 
-				+ "Player 2 Score: " + mPlayerTwoScore);
+		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()
+				+ " Player 2 Score: " + mPlayerTwo.getGlobalScore());
 		Thread.sleep(2000);
-		mMainFrame.putText("Player " + (mPlayerOneScore > mPlayerTwoScore ? "1" : "2") + " wins!");
+		mMainFrame.putText("Player " + 
+				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!");
 	}
 	
 	/** Entry point for a new game of Mind Body Fitness Challenge.

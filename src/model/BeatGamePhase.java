@@ -6,8 +6,9 @@ import controller.GalileoInterfacer;
 
 public class BeatGamePhase extends GamePhase {
 	
-	public BeatGamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(galileoInterfacer, mainFrame);
+	public BeatGamePhase(Player playerOne, Player playerTwo,
+			              GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
 		
 		this.mPhaseTag = PhaseTag.BEAT;
 		this.mDuration = 10000;
@@ -17,13 +18,13 @@ public class BeatGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(int player) {
+	public float getScoreFromGalileo(Player player) {
 		return mGalileoInterfacer.getBeatScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		
+		mMainFrame.putText("Keep the Beat!");
 	}
 }

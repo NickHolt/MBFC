@@ -17,6 +17,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ProgressBar mProgressBarOne, mProgressBarTwo;
 	private JLabel mTextPrompt;
+	private int mPlayerOneScore, mPlayerTwoScore, mMaxScore;
 	
 	public MainFrame() {
 		mProgressBarOne = new ProgressBar();
@@ -60,7 +61,11 @@ public class MainFrame extends JFrame {
 	
 	public void update() {
 		mTextPrompt.repaint();
+		
+		mProgressBarOne.setPercentFilled(mPlayerOneScore / mMaxScore);
 		mProgressBarOne.repaint();
+		
+		mProgressBarTwo.setPercentFilled(mPlayerTwoScore / mMaxScore);
 		mProgressBarTwo.repaint();
 	}
 	
@@ -68,12 +73,11 @@ public class MainFrame extends JFrame {
 		mTextPrompt.setText(string);
 	}
 	
-	public void setPlayerOnePercentageFill(float percent) {
-		mProgressBarOne.setPercentFilled(percent);
+	public void incrementPlayerOneScore(int amount) {
+		mPlayerOneScore += amount;
 	}
 	
-	public void setPlayerTwoPercentageFill(float percent) {
-		mProgressBarTwo.setPercentFilled(percent);
+	public void incrementPlayerTwoScore(int amount) {
+		mPlayerTwoScore += amount;
 	}
-
 }

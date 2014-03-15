@@ -6,8 +6,9 @@ import controller.GalileoInterfacer;
 
 public class ReactionTimeGamePhase extends GamePhase {
 
-	public ReactionTimeGamePhase(GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
-		super(galileoInterfacer, mainFrame);
+	public ReactionTimeGamePhase(Player playerOne, Player playerTwo,
+            GalileoInterfacer galileoInterfacer, MainFrame mainFrame) {
+		super(playerOne, playerTwo, galileoInterfacer, mainFrame);
 		
 		this.mPhaseTag = PhaseTag.REACTION_TIME;
 		this.mDuration = 10000;
@@ -17,14 +18,14 @@ public class ReactionTimeGamePhase extends GamePhase {
 	}
 
 	@Override
-	public float getScoreFromGalileo(int player) {
+	public float getScoreFromGalileo(Player player) {
 		return mGalileoInterfacer.getReactionTimeScore(player);
 	}
 
 	@Override
 	public void play() {
 		// TODO Auto-generated method stub
-		
+		mMainFrame.putText("React!");
 	}
 
 }
