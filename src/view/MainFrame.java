@@ -63,10 +63,12 @@ public class MainFrame extends JFrame {
 	public void update(Player playerOne, Player playerTwo, int maxScore) {
 		mTextPrompt.repaint();
 		
-		mProgressBarOne.setPercentFilled(playerOne.getGlobalScore() / maxScore);
+		mProgressBarOne.setPercentFilled((float) (playerOne.getGlobalScore() + playerOne.getCurrentScore())
+				                         / (float) maxScore);
 		mProgressBarOne.repaint();
 		
-		mProgressBarTwo.setPercentFilled(playerTwo.getGlobalScore() / maxScore);
+		mProgressBarTwo.setPercentFilled((float) (playerTwo.getGlobalScore() + playerTwo.getCurrentScore())
+                                         / (float) maxScore);
 		mProgressBarTwo.repaint();
 	}
 	

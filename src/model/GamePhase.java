@@ -91,10 +91,8 @@ public abstract class GamePhase {
 	 * @param tag the PhaseTag of the desired GamePhase.
 	 * @return The GamePhase representative of the TAG.
 	 */
-	public static GamePhase makeGamePhase(PhaseTag tag,
-											Player playerOne,
-											Player playerTwo,
-			                                Engine engine) {
+	public static GamePhase makeGamePhase(PhaseTag tag, Player playerOne,
+											Player playerTwo, Engine engine) {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
