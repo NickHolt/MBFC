@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /** The interface between Mind Body Fitness Challenge software and hardware. This class is responsible
@@ -25,7 +27,11 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	private static final String PORT_NAMES[] = { 
 			"/dev/tty.usbserial-A9007UX1", // Mac OS X
 			"/dev/ttyUSB0", // Linux
+			"COM1",
+			"COM2",
 			"COM3", // Windows
+			"COM4",
+			"COM5"
 	};
 	
 	private SerialPort mSerialPort;
@@ -43,6 +49,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	
 	public void initialize() {
 		CommPortIdentifier portId = null;
+		@SuppressWarnings("rawtypes")
 		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 	
 		//First, Find an instance of serial port as set in PORT_NAMES.
@@ -100,14 +107,55 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
-				// TODO: USE REGEX TO PLACE VALUES
-				String inputLine=mInput.readLine();
-				System.out.println(inputLine);
+				parseString(mInput.readLine());
 			} catch (Exception e) {
 				System.err.println(e.toString());
 			}
 		}
-		// Ignore all the other eventTypes, but you should consider the other ones.
+	}
+	
+	/** Parse a serial input line to determine sensor readings.
+	 * 
+	 * @param inputLine The serial input line. 
+	 */
+	public void parseString(String inputLine) {
+		String tagRegex = "(accel|heartrate|eeg|pressure)=(.*)";
+		Pattern pattern = Pattern.compile(tagRegex);
+		Matcher matcher = pattern.matcher(inputLine);
+		
+		if (matcher.matches()) {
+			String tag = matcher.group(1), value = matcher.group(2);
+			
+			String multipleValueRegex = "([\\d]+\\.[\\d]+),(([\\d]+\\.[\\d]+),?)+";
+			pattern = Pattern.compile(multipleValueRegex);
+			matcher = pattern.matcher(value);
+			
+			if(matcher.matches()) {
+				String[] floats = value.split(",");
+
+				switch(tag) {
+					case "accel":
+						mAccelerationValues[0] = Float.valueOf(floats[0]);
+						mAccelerationValues[1] = Float.valueOf(floats[1]);
+						mAccelerationValues[2] = Float.valueOf(floats[2]);
+						break;
+					case "eeg":
+						mEEGValues[0] = Float.valueOf(floats[0]);
+						mEEGValues[1] = Float.valueOf(floats[1]);
+						break;
+				}
+			} else {
+				switch(tag) {
+					case "heartrate":
+						mHeartRateValue = Float.valueOf(value);
+						break;
+					case "pressure":
+						mPressureValue = Float.valueOf(value);
+						break;
+				}
+			}
+		}
+
 	}
 
 	public float getPressureValue() {
