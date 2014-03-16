@@ -18,7 +18,8 @@ public class Engine {
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
 	/* The interface between the game code and the Galileo Boards. */
-	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer;
+	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer,
+	                           mLCDGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
@@ -28,6 +29,7 @@ public class Engine {
 		
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
+		mLCDGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
 		
@@ -53,11 +55,13 @@ public class Engine {
 			welcome();
 			/* Run the game phases */
 			for (GamePhase currentPhase : mGamePhases) {
+				// initialize player scores for the phase
 				mPlayerOne.setCurrentScore(0);
 				mPlayerTwo.setCurrentScore(0);
-				
+				// alert LCD display of new phase
+				mLCDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
 				currentPhase.play();
-				
+				// update global scores based on phase performance
 				mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
 				mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
 			}

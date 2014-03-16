@@ -34,7 +34,8 @@ public abstract class GamePhase {
 		mPlayerTwo.setCurrentScore(0);
 	}
 	
-	/** Play this game phase.
+	/** Play this game phase. A phase plays by simply requesting Galileo score
+	 *  data periodically.
 	 */
 	public void play() throws InterruptedException {
 		long startTime = System.currentTimeMillis();
@@ -122,7 +123,6 @@ public abstract class GamePhase {
 	 */
 	public static GamePhase makeGamePhase(PhaseTag tag, Player playerOne,
 											Player playerTwo, Engine engine) {
-		// TODO finish this
 		switch (tag) {
 			case ATTENTION: 
 				return new AttentionGamePhase(playerOne, playerTwo, engine);

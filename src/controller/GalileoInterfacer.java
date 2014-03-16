@@ -164,6 +164,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			}
 		}
 	}
+	
+	public void writeToGalileo(String s) {
+		//TODO
+	}
 
 	public float getPressureValue() {
 		return mPressureValue;
