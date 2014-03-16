@@ -85,12 +85,6 @@ public class Engine {
 		mMainFrame.putText("Player " + 
 				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!");
 	}
-	
-	/** Entry point for a new game of Mind Body Fitness Challenge.
-	 */
-	public static void main(String[] args) {
-		new Engine().run();
-	}
 
 	public GalileoInterfacer getGalileoInterfacer() {
 		return mGalileoInterfacer;
@@ -106,5 +100,11 @@ public class Engine {
 
 	public void setMaxScore(int maxScore) {
 		mMaxScore = maxScore;
+	}
+	
+	/** Entry point for a new game of Mind Body Fitness Challenge.
+	 */
+	public static void main(String[] args) {
+		new Engine().run();
 	}
 }
