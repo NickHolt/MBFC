@@ -8,6 +8,7 @@ import gnu.io.SerialPortEventListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,8 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	private BufferedReader mInput;
 	/** The output stream to the port */
 	private OutputStream mOutput;
+	/** The writer for the output stream */
+	private PrintWriter mPrintWriter;
 	/** The last recorded values for sensor readings. */
 	private float mBeatValue, mPressureValue, mHeartRateValue;
 	private float[] mAccelerationValues, mEEGValues;
@@ -86,6 +89,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			// open the streams
 			mInput = new BufferedReader(new InputStreamReader(mSerialPort.getInputStream()));
 			mOutput = mSerialPort.getOutputStream();
+			mPrintWriter = new PrintWriter(mOutput);
 	
 			// add event listeners
 			mSerialPort.addEventListener(this);
@@ -166,7 +170,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	}
 	
 	public void writeToGalileo(String s) {
-		//TODO
+		mPrintWriter.write(s);
 	}
 
 	public float getPressureValue() {

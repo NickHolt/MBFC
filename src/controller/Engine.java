@@ -95,8 +95,8 @@ public class Engine {
 	 */
 	private void conclude() throws InterruptedException {
 		mLCDGalileoInterfacer.writeToGalileo("END");
-		mLCDGalileoInterfacer.writeToGalileo("p1:" + mPlayerOne.getGlobalScore());
-		mLCDGalileoInterfacer.writeToGalileo("p2:" + mPlayerTwo.getGlobalScore());
+		mLCDGalileoInterfacer.writeToGalileo("p1=" + mPlayerOne.getGlobalScore());
+		mLCDGalileoInterfacer.writeToGalileo("p2=" + mPlayerTwo.getGlobalScore());
 		
 		
 		/*
