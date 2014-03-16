@@ -70,11 +70,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			for (String portName : PORT_NAMES) {
-				if (currPortId.getName().equals(portName)) {
-					if (Arrays.binarySearch(sPortsInUse, currPortId) == -1) {
-						portId = currPortId;
-						break;
-					}
+				if (currPortId.getName().equals(portName) &&
+						(sPortsInUse == null || Arrays.binarySearch(sPortsInUse, currPortId) == -1)) {
+					portId = currPortId;
+					break;
 				}
 			}
 		}
