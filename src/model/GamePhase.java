@@ -49,9 +49,11 @@ public abstract class GamePhase {
 	 */
 	public abstract float getScoreFromGalileo(Player player);
 	
+	/** Update the two Player's current score field based on current performance.
+	 */
 	public void incrementPlayerScores() {
-		float playerOneScore = mEngine.getPlayerOneGalileoInterfacer().getAttentionValue();
-		float playerTwoScore = mEngine.getPlayerTwoGalileoInterfacer().getAttentionValue();
+		float playerOneScore = getScoreFromGalileo(mPlayerOne);
+		float playerTwoScore = getScoreFromGalileo(mPlayerTwo);
 		float[] normalizedScores = normalizeScores(playerOneScore, playerTwoScore);
 		
 		mPlayerOne.incrementCurrentScore((int) (normalizedScores[0]
