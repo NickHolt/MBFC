@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +33,13 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			"COM2",
 			"COM3", // Windows
 			"COM4",
-			"COM5"
+			"COM5",
+			"COM6",
+			"COM7",
+			"COM8"
 	};
+	/** Ports currently in use. */
+	private static CommPortIdentifier[] sPortsInUse;
 	
 	private SerialPort mSerialPort;
 	/**
@@ -65,8 +71,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			for (String portName : PORT_NAMES) {
 				if (currPortId.getName().equals(portName)) {
-					portId = currPortId;
-					break;
+					if (Arrays.binarySearch(sPortsInUse, currPortId) == -1) {
+						portId = currPortId;
+						break;
+					}
 				}
 			}
 		}
@@ -94,6 +102,15 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			// add event listeners
 			mSerialPort.addEventListener(this);
 			mSerialPort.notifyOnDataAvailable(true);
+			
+			// add port IDs to used list
+			if (sPortsInUse == null) {
+				sPortsInUse = new CommPortIdentifier[1];
+				sPortsInUse[0] = portId;
+			} else {
+				sPortsInUse = new CommPortIdentifier[sPortsInUse.length + 1];
+				sPortsInUse[sPortsInUse.length - 1] = portId;
+			}
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
