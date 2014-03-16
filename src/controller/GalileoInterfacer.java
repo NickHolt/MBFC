@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +39,8 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			"COM8"
 	};
 	/** Ports currently in use. */
-	private static CommPortIdentifier[] sPortsInUse;
+	private static ArrayList<CommPortIdentifier> sPortsInUse 
+	                                             = new ArrayList<CommPortIdentifier>();
 	
 	private SerialPort mSerialPort;
 	/**
@@ -52,6 +53,8 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	private OutputStream mOutput;
 	/** The writer for the output stream */
 	private PrintWriter mPrintWriter;
+	/** The current port ID. */
+	private CommPortIdentifier mPortId;
 	/** The last recorded values for sensor readings. */
 	private float mBeatValue, mPressureValue, mHeartRateValue;
 	private float[] mAccelerationValues, mEEGValues;
@@ -62,7 +65,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	}
 	
 	public void initialize() {
-		CommPortIdentifier portId = null;
+		mPortId = null;
 		@SuppressWarnings("rawtypes")
 		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 	
@@ -70,21 +73,24 @@ public class GalileoInterfacer implements SerialPortEventListener {
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			for (String portName : PORT_NAMES) {
-				if (currPortId.getName().equals(portName) &&
-						(sPortsInUse == null || Arrays.binarySearch(sPortsInUse, currPortId) == -1)) {
-					portId = currPortId;
+				if (currPortId.getName().equals(portName)) {
+					if (sPortsInUse.contains(currPortId)) {
+						continue;
+					}
+					
+					mPortId = currPortId;
 					break;
 				}
 			}
 		}
-		if (portId == null) {
+		if (mPortId == null) {
 			System.out.println("Could not find COM port.");
 			return;
 		}
 	
 		try {
 			// open serial port, and use class name for the appName.
-			mSerialPort = (SerialPort) portId.open(this.getClass().getName(),
+			mSerialPort = (SerialPort) mPortId.open(this.getClass().getName(),
 					TIME_OUT);
 	
 			// set port parameters
@@ -103,13 +109,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			mSerialPort.notifyOnDataAvailable(true);
 			
 			// add port IDs to used list
-			if (sPortsInUse == null) {
-				sPortsInUse = new CommPortIdentifier[1];
-				sPortsInUse[0] = portId;
-			} else {
-				sPortsInUse = new CommPortIdentifier[sPortsInUse.length + 1];
-				sPortsInUse[sPortsInUse.length - 1] = portId;
-			}
+			sPortsInUse.add(mPortId);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -123,6 +123,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 		if (mSerialPort != null) {
 			mSerialPort.removeEventListener();
 			mSerialPort.close();
+			sPortsInUse.remove(mPortId);
 		}
 	}
 	
