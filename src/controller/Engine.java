@@ -67,12 +67,7 @@ public class Engine {
 	/** Displays a welcome message and counts down from 3.
 	 */
 	private void welcome() throws InterruptedException {
-		mMainFrame.putText("Welcome!");
-		Thread.sleep(2000);
-		for (int i = 3; i > 0; i--) {
-			mMainFrame.putText(String.valueOf(i));
-			Thread.sleep(1000);
-		}
+		mLCDGalileoInterfacer.writeToGalileo("START");
 	}
 	
 	/** Cycle through the game phases and play each while handling player scores.
@@ -95,9 +90,8 @@ public class Engine {
 	 */
 	private void conclude() throws InterruptedException {
 		mLCDGalileoInterfacer.writeToGalileo("END");
-		mLCDGalileoInterfacer.writeToGalileo("p1=" + mPlayerOne.getGlobalScore());
-		mLCDGalileoInterfacer.writeToGalileo("p2=" + mPlayerTwo.getGlobalScore());
-		
+		mLCDGalileoInterfacer.writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+		mLCDGalileoInterfacer.writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		
 		/*
 		mMainFrame.putText("Game over!");
@@ -107,7 +101,7 @@ public class Engine {
 		Thread.sleep(2000);
 		mMainFrame.putText("Player " + 
 				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!"); 
-				*/
+		*/
 	}
 
 	public GalileoInterfacer getPlayerOneGalileoInterfacer() {
