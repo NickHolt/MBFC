@@ -48,25 +48,15 @@ public class Engine {
 	 */
 	public void run() {
 		try {
-			mMainFrame.initialize();
+			mLCDGalileoInterfacer.initialize();
 			mPlayerOneGalileoInterfacer.initialize();
 			mPlayerTwoGalileoInterfacer.initialize();
 			
 			welcome();
-			/* Run the game phases */
-			for (GamePhase currentPhase : mGamePhases) {
-				// initialize player scores for the phase
-				mPlayerOne.setCurrentScore(0);
-				mPlayerTwo.setCurrentScore(0);
-				// alert LCD display of new phase
-				mLCDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
-				currentPhase.play();
-				// update global scores based on phase performance
-				mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
-				mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
-			}
+			playMain();
 			conclude();
 			
+			mLCDGalileoInterfacer.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
@@ -85,16 +75,39 @@ public class Engine {
 		}
 	}
 	
-	/** Display the player scores and declare the winner.
+	/** Cycle through the game phases and play each while handling player scores.
+	 */
+	private void playMain() throws InterruptedException {
+		for (GamePhase currentPhase : mGamePhases) {
+			// initialize player scores for the phase
+			mPlayerOne.setCurrentScore(0);
+			mPlayerTwo.setCurrentScore(0);
+			// alert LCD display of new phase
+			mLCDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
+			currentPhase.play();
+			// update global scores based on phase performance
+			mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
+			mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
+		}
+	}
+	
+	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
+		mLCDGalileoInterfacer.writeToGalileo("END");
+		mLCDGalileoInterfacer.writeToGalileo("p1:" + mPlayerOne.getGlobalScore());
+		mLCDGalileoInterfacer.writeToGalileo("p2:" + mPlayerTwo.getGlobalScore());
+		
+		
+		/*
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()
 				+ " Player 2 Score: " + mPlayerTwo.getGlobalScore());
 		Thread.sleep(2000);
 		mMainFrame.putText("Player " + 
-				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!");
+				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!"); 
+				*/
 	}
 
 	public GalileoInterfacer getPlayerOneGalileoInterfacer() {
