@@ -17,7 +17,7 @@ public class PressureGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mEngine.getGalileoInterfacer().getPressureScore(player);
+		return 0.0f;
 	}
 
 	@Override

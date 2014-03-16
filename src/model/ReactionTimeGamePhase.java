@@ -17,7 +17,7 @@ public class ReactionTimeGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mEngine.getGalileoInterfacer().getReactionTimeScore(player);
+		return 0.0f;
 	}
 
 	@Override

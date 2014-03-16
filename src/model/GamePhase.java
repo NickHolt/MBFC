@@ -87,6 +87,23 @@ public abstract class GamePhase {
 	          * (float) getMaxScore();
 	}
 	
+	/** Returns a 2-array of normalized player scores such that the larger is 1.0
+	 * and the other is percentage of the larger.
+	 * 
+	 *  E.g. normalizeScores(100, 50) => [1.0, 0.5]
+	 * 
+	 * @param score1 The score of the first player.
+	 * @param score2 The score of the second player.
+	 * @return The normalized scores.
+	 */
+	public static float[] normalizeScores(float score1, float score2) {
+		if (score1 > score2) {
+			return new float[]{1.0f, score2 / score1};
+		} else {
+			return new float[]{score1 / score2, 1.0f};
+		}
+	}
+	
 	/**
 	 * @param tag the PhaseTag of the desired GamePhase.
 	 * @return The GamePhase representative of the TAG.
@@ -96,7 +113,7 @@ public abstract class GamePhase {
 		// TODO finish this
 		switch (tag) {
 			case CONCENTRATE: 
-				return new ConcentrateGamePhase(playerOne, playerTwo, engine);
+				return new AttentionGamePhase(playerOne, playerTwo, engine);
 			case MEDITATE: 
 				return new MeditateGamePhase(playerOne, playerTwo, engine);
 			case HEARTRATE_HIGH:

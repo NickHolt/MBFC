@@ -17,8 +17,8 @@ public class Engine {
 	private int mMaxScore;
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
-	/* The interface between the game code and the Galileo Board. */
-	private GalileoInterfacer mGalileoInterfacer;
+	/* The interface between the game code and the Galileo Boards. */
+	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
@@ -26,7 +26,8 @@ public class Engine {
 		mPlayerOne = new Player();
 		mPlayerTwo = new Player();
 		
-		mGalileoInterfacer = new GalileoInterfacer();
+		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
+		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
 		
@@ -46,6 +47,9 @@ public class Engine {
 	public void run() {
 		try {
 			mMainFrame.initialize();
+			mPlayerOneGalileoInterfacer.initialize();
+			mPlayerTwoGalileoInterfacer.initialize();
+			
 			welcome();
 			/* Run the game phases */
 			for (GamePhase currentPhase : mGamePhases) {
@@ -58,6 +62,9 @@ public class Engine {
 				mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
 			}
 			conclude();
+			
+			mPlayerOneGalileoInterfacer.close();
+			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -86,8 +93,12 @@ public class Engine {
 				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!");
 	}
 
-	public GalileoInterfacer getGalileoInterfacer() {
-		return mGalileoInterfacer;
+	public GalileoInterfacer getPlayerOneGalileoInterfacer() {
+		return mPlayerOneGalileoInterfacer;
+	}
+	
+	public GalileoInterfacer getPlayerTwoGalileoInterfacer() {
+		return mPlayerTwoGalileoInterfacer;
 	}
 	
 	public MainFrame getMainFrame() {

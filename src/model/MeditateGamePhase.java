@@ -17,7 +17,7 @@ public class MeditateGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mEngine.getGalileoInterfacer().getMeditationScore(player);
+		return 0.0f;
 	}
 
 	@Override

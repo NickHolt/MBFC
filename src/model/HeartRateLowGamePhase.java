@@ -17,7 +17,7 @@ public class HeartRateLowGamePhase extends GamePhase {
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return mEngine.getGalileoInterfacer().getHeartbeatLowScore(player);
+		return 0.0f;
 	}
 
 	@Override
