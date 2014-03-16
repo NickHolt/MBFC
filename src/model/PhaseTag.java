@@ -5,11 +5,10 @@ package model;
  * @author nickholt
  */
 public enum PhaseTag {
-	CONCENTRATE,
-	MEDITATE,
-	HEARTRATE_HIGH,
-	HEARTRATE_LOW,
 	BEAT,
-	REACTION_TIME,
-	PRESSURE // etc...
+	PRESSURE,
+	MEDITATE,
+	ATTENTION,
+	HEARTRATE_HIGH,
+	HEARTRATE_LOW
 }

@@ -9,22 +9,19 @@ public class HeartRateLowGamePhase extends GamePhase {
 		super(playerOne, playerTwo, engine);
 		
 		this.mPhaseTag = PhaseTag.HEARTRATE_LOW;
-		this.mDuration = 10000;
-		this.mUpdatePeriod = 1000;
-		this.mMaxScore = 100;
+		this.mDuration = 20000;
+		this.mUpdatePeriod = 200;
+		this.mMaxScore = 20000;
 		// TODO
 	}
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
-		return 0.0f;
-	}
-
-	@Override
-	public void play() {
-		// TODO Auto-generated method stub
-		mEngine.getMainFrame().putText("Low Heart Rate!");
-		
+		if(player.equals(mPlayerOne)) {
+			return 1 / mEngine.getPlayerOneGalileoInterfacer().getHeartRateValue();
+		} else {
+			return 1 / mEngine.getPlayerTwoGalileoInterfacer().getHeartRateValue();
+		}
 	}
 
 }

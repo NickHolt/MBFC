@@ -36,7 +36,13 @@ public abstract class GamePhase {
 	
 	/** Play this game phase.
 	 */
-	public abstract void play() throws InterruptedException;
+	public void play() throws InterruptedException {
+		long startTime = System.currentTimeMillis();
+		while(System.currentTimeMillis() - startTime < mDuration) {
+			Thread.sleep(mUpdatePeriod);
+			incrementPlayerScores();
+		}
+	}
 	
 	/**
 	 * @return the relevant player score from the Galileo board.
@@ -44,10 +50,14 @@ public abstract class GamePhase {
 	public abstract float getScoreFromGalileo(Player player);
 	
 	public void incrementPlayerScores() {
-		mPlayerOne.incrementCurrentScore((int) (getScoreFromGalileo(mPlayerOne)
+		float playerOneScore = mEngine.getPlayerOneGalileoInterfacer().getAttentionValue();
+		float playerTwoScore = mEngine.getPlayerTwoGalileoInterfacer().getAttentionValue();
+		float[] normalizedScores = normalizeScores(playerOneScore, playerTwoScore);
+		
+		mPlayerOne.incrementCurrentScore((int) (normalizedScores[0]
 						                         * getIncrementWeight()));
 		
-		mPlayerTwo.incrementCurrentScore((int) (getScoreFromGalileo(mPlayerTwo)
+		mPlayerTwo.incrementCurrentScore((int) (normalizedScores[1]
                                                  * getIncrementWeight()));
 	}
 	
@@ -112,7 +122,7 @@ public abstract class GamePhase {
 											Player playerTwo, Engine engine) {
 		// TODO finish this
 		switch (tag) {
-			case CONCENTRATE: 
+			case ATTENTION: 
 				return new AttentionGamePhase(playerOne, playerTwo, engine);
 			case MEDITATE: 
 				return new MeditateGamePhase(playerOne, playerTwo, engine);
@@ -122,8 +132,6 @@ public abstract class GamePhase {
 				return new HeartRateLowGamePhase(playerOne, playerTwo, engine);
 			case BEAT:
 				return new BeatGamePhase(playerOne, playerTwo, engine);
-			case REACTION_TIME:
-				return new ReactionTimeGamePhase(playerOne, playerTwo, engine);
 			case PRESSURE:
 				return new PressureGamePhase(playerOne, playerTwo, engine);
 			default:

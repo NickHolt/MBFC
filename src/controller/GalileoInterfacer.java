@@ -44,8 +44,13 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	/** The output stream to the port */
 	private OutputStream mOutput;
 	/** The last recorded values for sensor readings. */
-	private float mPressureValue, mHeartRateValue, mReactionTimeValue;
+	private float mBeatValue, mPressureValue, mHeartRateValue;
 	private float[] mAccelerationValues, mEEGValues;
+	
+	public GalileoInterfacer() {
+		mAccelerationValues = new float[3];
+		mEEGValues = new float[2];
+	}
 	
 	public void initialize() {
 		CommPortIdentifier portId = null;
@@ -119,7 +124,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	 * @param inputLine The serial input line. 
 	 */
 	public void parseString(String inputLine) {
-		String tagRegex = "(accel|heartrate|eeg|pressure)=(.*)";
+		String tagRegex = "(beat|accel|heartrate|eeg|pressure)=(.*)";
 		Pattern pattern = Pattern.compile(tagRegex);
 		Matcher matcher = pattern.matcher(inputLine);
 		
@@ -146,6 +151,9 @@ public class GalileoInterfacer implements SerialPortEventListener {
 				}
 			} else {
 				switch(tag) {
+					case "beat":
+						mBeatValue = Float.valueOf(value);
+						break;
 					case "heartrate":
 						mHeartRateValue = Float.valueOf(value);
 						break;
@@ -155,7 +163,6 @@ public class GalileoInterfacer implements SerialPortEventListener {
 				}
 			}
 		}
-
 	}
 
 	public float getPressureValue() {
@@ -164,10 +171,6 @@ public class GalileoInterfacer implements SerialPortEventListener {
 
 	public float getHeartRateValue() {
 		return mHeartRateValue;
-	}
-
-	public float getReactionTimeValue() {
-		return mReactionTimeValue;
 	}
 
 	public float[] getAccelerationValues() {
@@ -196,5 +199,9 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	
 	public float getMeditationValue() {
 		return mEEGValues[1];
+	}
+
+	public float getBeatValue() {
+		return mBeatValue;
 	}
 }
