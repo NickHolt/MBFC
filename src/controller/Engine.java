@@ -1,5 +1,6 @@
 package controller;
 
+import jssc.SerialPortException;
 import model.GamePhase;
 import model.PhaseTag;
 import model.Player;
@@ -25,6 +26,9 @@ public class Engine {
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
+	public static final int COLOR_PLAYER_1 = LedMatrix.COLOR_RED;
+	public static final int COLOR_PLAYER_2 = LedMatrix.COLOR_BLUE;
+	
 	public Engine() {
 		mPlayerOne = new Player();
 		mPlayerTwo = new Player();
@@ -32,7 +36,15 @@ public class Engine {
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
 		
-//		mLedMatrix = new LedMatrix("COM8");
+//		mLedMatrix = new LedMatrix();
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		mLedMatrix.setTextWrap(false);
+//		mLedMatrix.setTextColor(LedMatrix.COLOR_GRAY_1);
 		
 		mMainFrame = new MainFrame();
 		
@@ -77,6 +89,12 @@ public class Engine {
 			mMainFrame.putText(String.valueOf(i));
 			Thread.sleep(1000);
 		}
+		
+		
+//		mLedMatrix.fillScreen(LedMatrix.COLOR_BLACK);
+//		mLedMatrix.scroll("Welcome!", 4, 80);
+		
+		
 	}
 	
 	/** Cycle through the game phases and play each while handling player scores.
@@ -86,8 +104,17 @@ public class Engine {
 			// initialize player scores for the phase
 			mPlayerOne.setCurrentScore(0);
 			mPlayerTwo.setCurrentScore(0);
-			// alert LCD display of new phase
-//			mLEDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
+			
+//			mLedMatrix.setTextSize(1);
+//			mLedMatrix.scroll(currentPhase.getPhaseTag().toString().replace("_", " "), 4, 80);
+//			
+//			mLedMatrix.setTextSize(2);
+//			for(int i = 3; i > 0; i--) {
+//				mLedMatrix.clear();
+//				mLedMatrix.drawTextCentered(String.valueOf(i), 16, 1);
+//				Thread.sleep(1000);
+//			}
+			
 			currentPhase.play();
 			// update global scores based on phase performance
 			mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
@@ -98,7 +125,6 @@ public class Engine {
 	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
-
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()

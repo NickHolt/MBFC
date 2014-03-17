@@ -113,6 +113,8 @@ public abstract class GamePhase {
 	 * @return The normalized scores.
 	 */
 	public static float[] normalizeScores(float score1, float score2) {
+//		System.out.println("Normalizing: " + score1 + ", " + score2);
+		
 		if (score1 == score2) {
 			return new float[]{0.0f, 0.0f};
 	    } else if (score1 > score2) {

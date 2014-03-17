@@ -26,6 +26,7 @@ public class Player {
 	}
 	
 	public void incrementCurrentScore(int amount) {
+		//System.out.println("Score incremented by " + amount);
 		mCurrentScore += amount;
 	}
 }

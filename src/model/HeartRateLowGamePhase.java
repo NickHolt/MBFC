@@ -24,9 +24,9 @@ public class HeartRateLowGamePhase extends GamePhase {
 	@Override
 	public float getScoreFromGalileo(Player player) {
 		if(player.equals(mPlayerOne)) {
-			return 1 / mEngine.getPlayerOneGalileoInterfacer().getHeartRateValue();
+			return 1 / (mEngine.getPlayerOneGalileoInterfacer().getHeartRateValue() + 1);
 		} else {
-			return 1 / mEngine.getPlayerTwoGalileoInterfacer().getHeartRateValue();
+			return 1 / (mEngine.getPlayerTwoGalileoInterfacer().getHeartRateValue() + 1);
 		}
 	}
 

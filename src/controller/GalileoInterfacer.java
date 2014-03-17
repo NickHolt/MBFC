@@ -36,7 +36,8 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			"COM5",
 			"COM6",
 			"COM7",
-			"COM8"
+			"COM8",
+			"COM9"
 	};
 	/** Ports currently in use. */
 	private static ArrayList<CommPortIdentifier> sPortsInUse 
@@ -168,8 +169,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 						mAccelerationValues[2] = Float.valueOf(floats[2]);
 						break;
 					case "eeg":
-						mEEGValues[0] = Float.valueOf(floats[0]);
-						mEEGValues[1] = Float.valueOf(floats[1]);
+						if (Float.valueOf(floats[0]) > 0) {
+							mEEGValues[0] = Float.valueOf(floats[1]);
+							mEEGValues[1] = Float.valueOf(floats[2]);
+						}
 						break;
 				}
 			} else {
@@ -193,7 +196,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	}
 
 	public float getPressureValue() {
-		return mPressureValue;
+		return 1000 - mPressureValue;
 	}
 
 	public float getHeartRateValue() {
@@ -230,19 +233,5 @@ public class GalileoInterfacer implements SerialPortEventListener {
 
 	public float getBeatValue() {
 		return mBeatValue;
-	}
-	
-	public static void main(String[] args) throws Exception {
-		GalileoInterfacer main = new GalileoInterfacer();
-		main.initialize();
-		Thread t=new Thread() {
-			public void run() {
-				//the following line will keep this app alive for 1000 seconds,
-				//waiting for events to occur and responding to them (printing incoming messages to console).
-				try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
-			}
-		};
-		t.start();
-		System.out.println("Started");
 	}
 }
