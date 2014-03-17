@@ -15,6 +15,9 @@ public class LedMatrix implements Closeable {
 	public static final int COLOR_BLACK = 0b0000000000000000;
 	public static final int COLOR_WHITE = 0b1111111111111111;
 	
+	public static final int WIDTH = 32;
+	public static final int HEIGHT = 16;
+	
 	private SerialPort serialPort;
 	
 	public LedMatrix(String portName) {
@@ -87,17 +90,24 @@ public class LedMatrix implements Closeable {
 		matrix.setTextColor(COLOR_CYAN);
 		matrix.print("Java!");*/
 		
-		int[] colors = new int[]{COLOR_RED, COLOR_GREEN, COLOR_BLUE};
-		for(int i = 0; i < 12; i++) {
-			matrix.setTextColor(colors[i % colors.length]);
-			matrix.setCursor(0, 0);
-			matrix.print("Java!");
-			try {
-				Thread.sleep(1000);
-			} catch(InterruptedException e) {
-				e.printStackTrace();
+		//int[] colors = new int[]{COLOR_RED, COLOR_GREEN, COLOR_BLUE};
+		while(true) {
+			for(int i = 0; i <= WIDTH; i++) {
+				matrix.fillScreen(COLOR_BLACK);
+				/*matrix.setTextColor(colors[i % colors.length]);
+				matrix.setCursor(0, 0);
+				matrix.print("Java!");*/
+				matrix.drawRect(0, 0, i, 2, COLOR_RED);
+				
+				
+				try {
+					Thread.sleep(5);
+				} catch(InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		
 		/*try {
 			Thread.sleep(1000);
 		} catch(InterruptedException e) {
