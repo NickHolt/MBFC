@@ -42,6 +42,8 @@ public abstract class GamePhase {
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			Thread.sleep(mUpdatePeriod);
 			incrementPlayerScores();
+			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		}
 	}
 	
@@ -132,10 +134,10 @@ public abstract class GamePhase {
 				return new HeartRateHighGamePhase(playerOne, playerTwo, engine);
 			case HEARTRATE_LOW:
 				return new HeartRateLowGamePhase(playerOne, playerTwo, engine);
-			case BEAT:
-				return new BeatGamePhase(playerOne, playerTwo, engine);
 			case PRESSURE:
 				return new PressureGamePhase(playerOne, playerTwo, engine);
+			case SQUEEZE:
+				return new SqueezeGamePhase(playerOne, playerTwo, engine);
 			default:
 				return null;
 		}

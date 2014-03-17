@@ -19,7 +19,7 @@ public class Engine {
 	private GamePhase[] mGamePhases;
 	/* The interface between the game code and the Galileo Boards. */
 	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer,
-	                           mLCDGalileoInterfacer;
+	                           mLEDGalileoInterfacer;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
@@ -29,7 +29,7 @@ public class Engine {
 		
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
-		mLCDGalileoInterfacer = new GalileoInterfacer();
+		mLEDGalileoInterfacer = new GalileoInterfacer();
 		
 		mMainFrame = new MainFrame();
 		
@@ -48,7 +48,7 @@ public class Engine {
 	 */
 	public void run() {
 		try {
-			mLCDGalileoInterfacer.initialize();
+			mLEDGalileoInterfacer.initialize();
 			mPlayerOneGalileoInterfacer.initialize();
 			mPlayerTwoGalileoInterfacer.initialize();
 			
@@ -56,7 +56,7 @@ public class Engine {
 			playMain();
 			conclude();
 			
-			mLCDGalileoInterfacer.close();
+			mLEDGalileoInterfacer.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public class Engine {
 	/** Displays a welcome message and counts down from 3.
 	 */
 	private void welcome() throws InterruptedException {
-		mLCDGalileoInterfacer.writeToGalileo("START");
+		mLEDGalileoInterfacer.writeToGalileo("START");
 	}
 	
 	/** Cycle through the game phases and play each while handling player scores.
@@ -78,7 +78,7 @@ public class Engine {
 			mPlayerOne.setCurrentScore(0);
 			mPlayerTwo.setCurrentScore(0);
 			// alert LCD display of new phase
-			mLCDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
+			mLEDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
 			currentPhase.play();
 			// update global scores based on phase performance
 			mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
@@ -89,9 +89,9 @@ public class Engine {
 	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
-		mLCDGalileoInterfacer.writeToGalileo("END");
-		mLCDGalileoInterfacer.writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
-		mLCDGalileoInterfacer.writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
+		mLEDGalileoInterfacer.writeToGalileo("END");
+		mLEDGalileoInterfacer.writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+		mLEDGalileoInterfacer.writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		
 		/*
 		mMainFrame.putText("Game over!");
@@ -110,6 +110,11 @@ public class Engine {
 	
 	public GalileoInterfacer getPlayerTwoGalileoInterfacer() {
 		return mPlayerTwoGalileoInterfacer;
+	}
+	
+	
+	public GalileoInterfacer getLEDGalileoInterfacer() {
+		return mLEDGalileoInterfacer;
 	}
 	
 	public MainFrame getMainFrame() {

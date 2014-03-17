@@ -5,8 +5,8 @@ package model;
  * @author nickholt
  */
 public enum PhaseTag {
-	BEAT,
 	PRESSURE,
+	SQUEEZE,
 	MEDITATE,
 	ATTENTION,
 	HEARTRATE_HIGH,

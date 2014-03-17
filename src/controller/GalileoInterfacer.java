@@ -123,8 +123,9 @@ public class GalileoInterfacer implements SerialPortEventListener {
 		if (mSerialPort != null) {
 			mSerialPort.removeEventListener();
 			mSerialPort.close();
-			sPortsInUse.remove(mPortId);
 		}
+
+		sPortsInUse.remove(mPortId);
 	}
 	
 	/**
@@ -145,6 +146,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	 * @param inputLine The serial input line. 
 	 */
 	public void parseString(String inputLine) {
+		System.out.println(inputLine);
 		String tagRegex = "(beat|accel|heartrate|eeg|pressure)=(.*)";
 		Pattern pattern = Pattern.compile(tagRegex);
 		Matcher matcher = pattern.matcher(inputLine);
@@ -228,5 +230,19 @@ public class GalileoInterfacer implements SerialPortEventListener {
 
 	public float getBeatValue() {
 		return mBeatValue;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		GalileoInterfacer main = new GalileoInterfacer();
+		main.initialize();
+		Thread t=new Thread() {
+			public void run() {
+				//the following line will keep this app alive for 1000 seconds,
+				//waiting for events to occur and responding to them (printing incoming messages to console).
+				try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
+			}
+		};
+		t.start();
+		System.out.println("Started");
 	}
 }
