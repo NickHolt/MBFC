@@ -91,12 +91,12 @@ public class LedMatrix implements Closeable {
 		matrix.print("Java!");*/
 		
 		//int[] colors = new int[]{COLOR_RED, COLOR_GREEN, COLOR_BLUE};
-		while(true) {
+		/*while(true) {
 			for(int i = 0; i <= WIDTH; i++) {
 				matrix.fillScreen(COLOR_BLACK);
 				/*matrix.setTextColor(colors[i % colors.length]);
 				matrix.setCursor(0, 0);
-				matrix.print("Java!");*/
+				matrix.print("Java!");*
 				matrix.drawRect(0, 0, i, 2, COLOR_RED);
 				
 				
@@ -106,8 +106,34 @@ public class LedMatrix implements Closeable {
 					e.printStackTrace();
 				}
 			}
+		}*/
+		
+		matrix.setTextWrap(false);
+		matrix.setTextSize(2);
+		
+		try {
+			Thread.sleep(2000);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
 		}
 		
+		for(int i = 3; i > 0; i--) {
+			matrix.fillScreen(COLOR_BLACK);
+			matrix.setCursor(11, 1);
+			matrix.print(String.valueOf(i));
+			
+			try {
+				Thread.sleep(1000);
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		matrix.fillScreen(COLOR_BLACK);
+		matrix.setTextColor(COLOR_GREEN);
+		matrix.setTextSize(1);
+		matrix.setCursor(0, 0);
+		matrix.print("Start");
 		/*try {
 			Thread.sleep(1000);
 		} catch(InterruptedException e) {
