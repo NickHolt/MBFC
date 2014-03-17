@@ -42,8 +42,9 @@ public abstract class GamePhase {
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			Thread.sleep(mUpdatePeriod);
 			incrementPlayerScores();
-			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
-			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
+			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
+//			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+//			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		}
 	}
 	
@@ -112,7 +113,9 @@ public abstract class GamePhase {
 	 * @return The normalized scores.
 	 */
 	public static float[] normalizeScores(float score1, float score2) {
-		if (score1 > score2) {
+		if (score1 == score2) {
+			return new float[]{0.0f, 0.0f};
+	    } else if (score1 > score2) {
 			return new float[]{1.0f, score2 / score1};
 		} else {
 			return new float[]{score1 / score2, 1.0f};

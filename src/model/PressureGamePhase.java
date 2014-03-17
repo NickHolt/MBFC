@@ -24,14 +24,16 @@ public class PressureGamePhase extends GamePhase {
 		long startTime = System.currentTimeMillis();
 		Random rand = new Random(System.currentTimeMillis());
 		
+		mEngine.getMainFrame().putText("Match the pressure!");
+		
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			mTargetPressure = rand.nextFloat() * (PRESSURE_RANGE[1] - PRESSURE_RANGE[0]) +
 					          PRESSURE_RANGE[0];
 			//TODO display target pressure
 			Thread.sleep(mUpdatePeriod);
 			incrementPlayerScores();
-			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
-			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
+//			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+//			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		}
 	}
 	

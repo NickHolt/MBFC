@@ -14,6 +14,12 @@ public class AttentionGamePhase extends GamePhase {
 		this.mMaxScore = 15000;
 		// TODO
 	}
+	
+	@Override
+	public void play() throws InterruptedException {
+		mEngine.getMainFrame().putText("Pay Attention!");
+		super.play();
+	}
 
 	@Override
 	public float getScoreFromGalileo(Player player) {

@@ -14,6 +14,12 @@ public class HeartRateHighGamePhase extends GamePhase {
 		this.mMaxScore = 15000;
 		// TODO
 	}
+	
+	@Override
+	public void play() throws InterruptedException {
+		mEngine.getMainFrame().putText("Raise your heart rate!");
+		super.play();
+	}
 
 	@Override
 	public float getScoreFromGalileo(Player player) {

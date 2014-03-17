@@ -32,7 +32,7 @@ public class Engine {
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
 		
-		mLedMatrix = new LedMatrix("COM6");
+//		mLedMatrix = new LedMatrix("COM8");
 		
 		mMainFrame = new MainFrame();
 		
@@ -54,11 +54,13 @@ public class Engine {
 			mPlayerOneGalileoInterfacer.initialize();
 			mPlayerTwoGalileoInterfacer.initialize();
 			
+			mMainFrame.initialize();
+			
 			welcome();
 			playMain();
 			conclude();
 			
-			mLedMatrix.close();
+//			mLedMatrix.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
@@ -69,7 +71,12 @@ public class Engine {
 	/** Displays a welcome message and counts down from 3.
 	 */
 	private void welcome() throws InterruptedException {
-		mLEDGalileoInterfacer.writeToGalileo("START");
+		mMainFrame.putText("Welcome!");
+		Thread.sleep(2000);
+		for(int i = 3; i > 0; i--) {
+			mMainFrame.putText(String.valueOf(i));
+			Thread.sleep(1000);
+		}
 	}
 	
 	/** Cycle through the game phases and play each while handling player scores.
@@ -80,7 +87,7 @@ public class Engine {
 			mPlayerOne.setCurrentScore(0);
 			mPlayerTwo.setCurrentScore(0);
 			// alert LCD display of new phase
-			mLEDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
+//			mLEDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
 			currentPhase.play();
 			// update global scores based on phase performance
 			mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
@@ -91,11 +98,7 @@ public class Engine {
 	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
-		mLEDGalileoInterfacer.writeToGalileo("END");
-		mLEDGalileoInterfacer.writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
-		mLEDGalileoInterfacer.writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
-		
-		/*
+
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()
@@ -103,7 +106,6 @@ public class Engine {
 		Thread.sleep(2000);
 		mMainFrame.putText("Player " + 
 				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!"); 
-		*/
 	}
 
 	public GalileoInterfacer getPlayerOneGalileoInterfacer() {
@@ -115,8 +117,8 @@ public class Engine {
 	}
 	
 	
-	public GalileoInterfacer getLEDGalileoInterfacer() {
-		return mLEDGalileoInterfacer;
+	public LedMatrix getLedMatrix() {
+		return mLedMatrix;
 	}
 	
 	public MainFrame getMainFrame() {

@@ -15,6 +15,12 @@ public class SqueezeGamePhase extends GamePhase {
 		this.mMaxPressure = 0;
 		// TODO
 	}
+	
+	@Override
+	public void play() throws InterruptedException {
+		mEngine.getMainFrame().putText("Squeeze Hard!");
+		super.play();
+	}
 
 	@Override
 	public float getScoreFromGalileo(Player player) {
