@@ -2,8 +2,9 @@ package controller;
 
 import model.GamePhase;
 import model.PhaseTag;
-import view.MainFrame;
 import model.Player;
+import view.LedMatrix;
+import view.MainFrame;
 
 /** The Engine controlling the software behind a game of Mind Body Fitness Challenge. It is the Engine's
  * job to maintain state such as player scores, and orchestrate the different phases of the game.
@@ -18,8 +19,9 @@ public class Engine {
 	/* The ordered phases that the game will progress through. */
 	private GamePhase[] mGamePhases;
 	/* The interface between the game code and the Galileo Boards. */
-	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer,
-	                           mLEDGalileoInterfacer;
+	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer;
+	/* The LED matrix */
+	private LedMatrix mLedMatrix;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
@@ -29,7 +31,8 @@ public class Engine {
 		
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
-		mLEDGalileoInterfacer = new GalileoInterfacer();
+		
+		mLedMatrix = new LedMatrix("COM6");
 		
 		mMainFrame = new MainFrame();
 		
@@ -48,7 +51,6 @@ public class Engine {
 	 */
 	public void run() {
 		try {
-			mLEDGalileoInterfacer.initialize();
 			mPlayerOneGalileoInterfacer.initialize();
 			mPlayerTwoGalileoInterfacer.initialize();
 			
@@ -56,7 +58,7 @@ public class Engine {
 			playMain();
 			conclude();
 			
-			mLEDGalileoInterfacer.close();
+			mLedMatrix.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
