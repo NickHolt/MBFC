@@ -34,13 +34,16 @@ public abstract class GamePhase {
 		mPlayerTwo.setCurrentScore(0);
 	}
 	
-	/** Play this game phase.
+	/** Play this game phase. A phase plays by simply requesting Galileo score
+	 *  data periodically.
 	 */
 	public void play() throws InterruptedException {
 		long startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			Thread.sleep(mUpdatePeriod);
 			incrementPlayerScores();
+			mEngine.getLEDGalileoInterfacer().writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+			mEngine.getLEDGalileoInterfacer().writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
 		}
 	}
 	
@@ -49,9 +52,11 @@ public abstract class GamePhase {
 	 */
 	public abstract float getScoreFromGalileo(Player player);
 	
+	/** Update the two Player's current score field based on current performance.
+	 */
 	public void incrementPlayerScores() {
-		float playerOneScore = mEngine.getPlayerOneGalileoInterfacer().getAttentionValue();
-		float playerTwoScore = mEngine.getPlayerTwoGalileoInterfacer().getAttentionValue();
+		float playerOneScore = getScoreFromGalileo(mPlayerOne);
+		float playerTwoScore = getScoreFromGalileo(mPlayerTwo);
 		float[] normalizedScores = normalizeScores(playerOneScore, playerTwoScore);
 		
 		mPlayerOne.incrementCurrentScore((int) (normalizedScores[0]
@@ -120,7 +125,6 @@ public abstract class GamePhase {
 	 */
 	public static GamePhase makeGamePhase(PhaseTag tag, Player playerOne,
 											Player playerTwo, Engine engine) {
-		// TODO finish this
 		switch (tag) {
 			case ATTENTION: 
 				return new AttentionGamePhase(playerOne, playerTwo, engine);
@@ -130,10 +134,10 @@ public abstract class GamePhase {
 				return new HeartRateHighGamePhase(playerOne, playerTwo, engine);
 			case HEARTRATE_LOW:
 				return new HeartRateLowGamePhase(playerOne, playerTwo, engine);
-			case BEAT:
-				return new BeatGamePhase(playerOne, playerTwo, engine);
 			case PRESSURE:
 				return new PressureGamePhase(playerOne, playerTwo, engine);
+			case SQUEEZE:
+				return new SqueezeGamePhase(playerOne, playerTwo, engine);
 			default:
 				return null;
 		}

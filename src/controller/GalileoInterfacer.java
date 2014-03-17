@@ -8,6 +8,8 @@ import gnu.io.SerialPortEventListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,8 +33,14 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			"COM2",
 			"COM3", // Windows
 			"COM4",
-			"COM5"
+			"COM5",
+			"COM6",
+			"COM7",
+			"COM8"
 	};
+	/** Ports currently in use. */
+	private static ArrayList<CommPortIdentifier> sPortsInUse 
+	                                             = new ArrayList<CommPortIdentifier>();
 	
 	private SerialPort mSerialPort;
 	/**
@@ -43,6 +51,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	private BufferedReader mInput;
 	/** The output stream to the port */
 	private OutputStream mOutput;
+	/** The writer for the output stream */
+	private PrintWriter mPrintWriter;
+	/** The current port ID. */
+	private CommPortIdentifier mPortId;
 	/** The last recorded values for sensor readings. */
 	private float mBeatValue, mPressureValue, mHeartRateValue;
 	private float[] mAccelerationValues, mEEGValues;
@@ -53,7 +65,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	}
 	
 	public void initialize() {
-		CommPortIdentifier portId = null;
+		mPortId = null;
 		@SuppressWarnings("rawtypes")
 		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 	
@@ -62,19 +74,23 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			for (String portName : PORT_NAMES) {
 				if (currPortId.getName().equals(portName)) {
-					portId = currPortId;
+					if (sPortsInUse.contains(currPortId)) {
+						continue;
+					}
+					
+					mPortId = currPortId;
 					break;
 				}
 			}
 		}
-		if (portId == null) {
+		if (mPortId == null) {
 			System.out.println("Could not find COM port.");
 			return;
 		}
 	
 		try {
 			// open serial port, and use class name for the appName.
-			mSerialPort = (SerialPort) portId.open(this.getClass().getName(),
+			mSerialPort = (SerialPort) mPortId.open(this.getClass().getName(),
 					TIME_OUT);
 	
 			// set port parameters
@@ -86,10 +102,14 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			// open the streams
 			mInput = new BufferedReader(new InputStreamReader(mSerialPort.getInputStream()));
 			mOutput = mSerialPort.getOutputStream();
+			mPrintWriter = new PrintWriter(mOutput);
 	
 			// add event listeners
 			mSerialPort.addEventListener(this);
 			mSerialPort.notifyOnDataAvailable(true);
+			
+			// add port IDs to used list
+			sPortsInUse.add(mPortId);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -104,6 +124,8 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			mSerialPort.removeEventListener();
 			mSerialPort.close();
 		}
+
+		sPortsInUse.remove(mPortId);
 	}
 	
 	/**
@@ -124,6 +146,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	 * @param inputLine The serial input line. 
 	 */
 	public void parseString(String inputLine) {
+		System.out.println(inputLine);
 		String tagRegex = "(beat|accel|heartrate|eeg|pressure)=(.*)";
 		Pattern pattern = Pattern.compile(tagRegex);
 		Matcher matcher = pattern.matcher(inputLine);
@@ -164,6 +187,10 @@ public class GalileoInterfacer implements SerialPortEventListener {
 			}
 		}
 	}
+	
+	public void writeToGalileo(String s) {
+		mPrintWriter.write(s);
+	}
 
 	public float getPressureValue() {
 		return mPressureValue;
@@ -203,5 +230,19 @@ public class GalileoInterfacer implements SerialPortEventListener {
 
 	public float getBeatValue() {
 		return mBeatValue;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		GalileoInterfacer main = new GalileoInterfacer();
+		main.initialize();
+		Thread t=new Thread() {
+			public void run() {
+				//the following line will keep this app alive for 1000 seconds,
+				//waiting for events to occur and responding to them (printing incoming messages to console).
+				try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
+			}
+		};
+		t.start();
+		System.out.println("Started");
 	}
 }

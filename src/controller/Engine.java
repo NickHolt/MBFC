@@ -2,8 +2,9 @@ package controller;
 
 import model.GamePhase;
 import model.PhaseTag;
-import view.MainFrame;
 import model.Player;
+import view.LedMatrix;
+import view.MainFrame;
 
 /** The Engine controlling the software behind a game of Mind Body Fitness Challenge. It is the Engine's
  * job to maintain state such as player scores, and orchestrate the different phases of the game.
@@ -19,6 +20,8 @@ public class Engine {
 	private GamePhase[] mGamePhases;
 	/* The interface between the game code and the Galileo Boards. */
 	private GalileoInterfacer mPlayerOneGalileoInterfacer, mPlayerTwoGalileoInterfacer;
+	/* The LED matrix */
+	private LedMatrix mLedMatrix;
 	/* The main GUI component through which all view updates are done. */
 	private MainFrame mMainFrame;
 	
@@ -28,6 +31,8 @@ public class Engine {
 		
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
+		
+		mLedMatrix = new LedMatrix("COM6");
 		
 		mMainFrame = new MainFrame();
 		
@@ -46,23 +51,14 @@ public class Engine {
 	 */
 	public void run() {
 		try {
-			mMainFrame.initialize();
 			mPlayerOneGalileoInterfacer.initialize();
 			mPlayerTwoGalileoInterfacer.initialize();
 			
 			welcome();
-			/* Run the game phases */
-			for (GamePhase currentPhase : mGamePhases) {
-				mPlayerOne.setCurrentScore(0);
-				mPlayerTwo.setCurrentScore(0);
-				
-				currentPhase.play();
-				
-				mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
-				mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
-			}
+			playMain();
 			conclude();
 			
+			mLedMatrix.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
@@ -73,24 +69,41 @@ public class Engine {
 	/** Displays a welcome message and counts down from 3.
 	 */
 	private void welcome() throws InterruptedException {
-		mMainFrame.putText("Welcome!");
-		Thread.sleep(2000);
-		for (int i = 3; i > 0; i--) {
-			mMainFrame.putText(String.valueOf(i));
-			Thread.sleep(1000);
+		mLEDGalileoInterfacer.writeToGalileo("START");
+	}
+	
+	/** Cycle through the game phases and play each while handling player scores.
+	 */
+	private void playMain() throws InterruptedException {
+		for (GamePhase currentPhase : mGamePhases) {
+			// initialize player scores for the phase
+			mPlayerOne.setCurrentScore(0);
+			mPlayerTwo.setCurrentScore(0);
+			// alert LCD display of new phase
+			mLEDGalileoInterfacer.writeToGalileo(currentPhase.getPhaseTag().toString());
+			currentPhase.play();
+			// update global scores based on phase performance
+			mPlayerOne.incrementGlobalScore(mPlayerOne.getCurrentScore());
+			mPlayerTwo.incrementGlobalScore(mPlayerTwo.getCurrentScore());
 		}
 	}
 	
-	/** Display the player scores and declare the winner.
+	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
+		mLEDGalileoInterfacer.writeToGalileo("END");
+		mLEDGalileoInterfacer.writeToGalileo("P1=" + mPlayerOne.getGlobalScore());
+		mLEDGalileoInterfacer.writeToGalileo("P2=" + mPlayerTwo.getGlobalScore());
+		
+		/*
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()
 				+ " Player 2 Score: " + mPlayerTwo.getGlobalScore());
 		Thread.sleep(2000);
 		mMainFrame.putText("Player " + 
-				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!");
+				(mPlayerOne.getGlobalScore() > mPlayerTwo.getGlobalScore() ? "1" : "2") + " wins!"); 
+		*/
 	}
 
 	public GalileoInterfacer getPlayerOneGalileoInterfacer() {
@@ -99,6 +112,11 @@ public class Engine {
 	
 	public GalileoInterfacer getPlayerTwoGalileoInterfacer() {
 		return mPlayerTwoGalileoInterfacer;
+	}
+	
+	
+	public GalileoInterfacer getLEDGalileoInterfacer() {
+		return mLEDGalileoInterfacer;
 	}
 	
 	public MainFrame getMainFrame() {
