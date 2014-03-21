@@ -36,15 +36,15 @@ public class Engine {
 		mPlayerOneGalileoInterfacer = new GalileoInterfacer();
 		mPlayerTwoGalileoInterfacer = new GalileoInterfacer();
 		
-//		mLedMatrix = new LedMatrix();
-//		try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		mLedMatrix.setTextWrap(false);
-//		mLedMatrix.setTextColor(LedMatrix.COLOR_GRAY_1);
+		mLedMatrix = new LedMatrix();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mLedMatrix.setTextWrap(false);
+		mLedMatrix.setTextColor(LedMatrix.COLOR_GRAY_1);
 		
 		mMainFrame = new MainFrame();
 		
@@ -72,7 +72,7 @@ public class Engine {
 			playMain();
 			conclude();
 			
-//			mLedMatrix.close();
+			mLedMatrix.close();
 			mPlayerOneGalileoInterfacer.close();
 			mPlayerTwoGalileoInterfacer.close();
 		} catch (InterruptedException e) {
@@ -91,10 +91,8 @@ public class Engine {
 		}
 		
 		
-//		mLedMatrix.fillScreen(LedMatrix.COLOR_BLACK);
-//		mLedMatrix.scroll("Welcome!", 4, 80);
-		
-		
+		mLedMatrix.fillScreen(LedMatrix.COLOR_BLACK);
+		mLedMatrix.scroll("Welcome!", 4, 80);
 	}
 	
 	/** Cycle through the game phases and play each while handling player scores.
@@ -105,15 +103,15 @@ public class Engine {
 			mPlayerOne.setCurrentScore(0);
 			mPlayerTwo.setCurrentScore(0);
 			
-//			mLedMatrix.setTextSize(1);
-//			mLedMatrix.scroll(currentPhase.getPhaseTag().toString().replace("_", " "), 4, 80);
-//			
-//			mLedMatrix.setTextSize(2);
-//			for(int i = 3; i > 0; i--) {
-//				mLedMatrix.clear();
-//				mLedMatrix.drawTextCentered(String.valueOf(i), 16, 1);
-//				Thread.sleep(1000);
-//			}
+			mLedMatrix.setTextSize(1);
+			mLedMatrix.scroll(currentPhase.getPhaseTag().toString().replace("_", " "), 4, 80);
+			
+			mLedMatrix.setTextSize(2);
+			for(int i = 3; i > 0; i--) {
+				mLedMatrix.clear();
+				mLedMatrix.drawTextCentered(String.valueOf(i), 16, 1);
+				Thread.sleep(1000);
+			}
 			
 			currentPhase.play();
 			// update global scores based on phase performance
@@ -125,6 +123,7 @@ public class Engine {
 	/** Alert LCD to the end of the game and report scores.
 	 */
 	private void conclude() throws InterruptedException {
+		//TODO Conclude with LCD as well
 		mMainFrame.putText("Game over!");
 		Thread.sleep(2000);
 		mMainFrame.putText("Player 1 Score: " + mPlayerOne.getGlobalScore()

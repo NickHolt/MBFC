@@ -3,6 +3,7 @@ package view;
 import java.io.Closeable;
 import java.util.regex.Pattern;
 
+import controller.Engine;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -31,6 +32,11 @@ public class LedMatrix implements Closeable {
     
     public LedMatrix() {
     	initializeSerial();
+    }
+    
+    public void drawProgressBars(float pOnePercent, float pTwoPercent, int pOneColor, int pTwoColor) {
+    	fillRect(0, 12, (int) (LedMatrix.WIDTH * pOnePercent), 2, pOneColor);
+		fillRect(0, 14, (int) (LedMatrix.WIDTH * pTwoPercent), 2, pTwoColor);
     }
     
     public void drawPixel(int x, int y, int color) {
@@ -129,62 +135,6 @@ public class LedMatrix implements Closeable {
     			e.printStackTrace();
     		}
     	}
-    }
-    
-    public static void main(String[] args) {
-        LedMatrix matrix = new LedMatrix();
-        
-        try {
-            Thread.sleep(2000);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        matrix.setTextWrap(false);
-        matrix.setTextColor(COLOR_GRAY_1, COLOR_BLACK);
-		matrix.fillScreen(LedMatrix.COLOR_BLACK);
-		while(true) {
-			matrix.scroll("Scrolling", 0, 100);
-		}
-        /*
-        matrix.setTextSize(2);
-        
-        try {
-            Thread.sleep(2000);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        for(int i = 3; i > 0; i--) {
-            matrix.fillScreen(COLOR_BLACK);
-            matrix.setCursor(11, 1);
-            matrix.print(String.valueOf(i));
-            
-            try {
-                Thread.sleep(1000);
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        matrix.fillScreen(COLOR_BLACK);
-        matrix.setTextColor(COLOR_GREEN);
-        matrix.setTextSize(1);
-        matrix.setCursor(0, 0);
-        matrix.print("Start");*/
-
-        /*try {
-            Thread.sleep(1000);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        matrix.doStuff();
-        
-        System.out.println("Unblock");
-        
-        matrix.close();*/
-        
     }
     
     private void sendCommand(String command) {

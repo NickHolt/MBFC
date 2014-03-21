@@ -31,11 +31,12 @@ public class PressureGamePhase extends GamePhase {
 			mTargetPressure = rand.nextFloat() * (PRESSURE_RANGE[1] - PRESSURE_RANGE[0]) +
 					          PRESSURE_RANGE[0];
 			mEngine.getMainFrame().putText("Match the pressure: " + 100 * (mTargetPressure / 1000.0f) + "%");
-//			ledMatrix.clear();
-//			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure / 1000f), 4, LedMatrix.COLOR_CYAN);
-//			
-//			ledMatrix.fillRect(0, 12, LedMatrix.WIDTH * mPlayerOne.getGlobalScore() / mEngine.getMaxScore(), 2, Engine.COLOR_PLAYER_1);
-//			ledMatrix.fillRect(0, 14, LedMatrix.WIDTH * mPlayerTwo.getGlobalScore() / mEngine.getMaxScore(), 2, Engine.COLOR_PLAYER_2);
+			ledMatrix.clear();
+			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure / 1000f), 4, LedMatrix.COLOR_CYAN);
+			
+			ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
+					                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
+					                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
 			
 			Thread.sleep(mUpdatePeriod);
 			incrementPlayerScores();
