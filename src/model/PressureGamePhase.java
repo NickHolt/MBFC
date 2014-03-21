@@ -8,7 +8,8 @@ import controller.Engine;
 
 public class PressureGamePhase extends GamePhase {
 	private float mTargetPressure;
-
+	private long mRandomizeInterval = 5000;//milliseconds
+	
 	public PressureGamePhase(Player playerOne, Player playerTwo, Engine engine) {
 		super(playerOne, playerTwo, engine);
 		
@@ -27,15 +28,26 @@ public class PressureGamePhase extends GamePhase {
 		Random rand = new Random(System.currentTimeMillis());
 		
 		float targetPressure = 0.5f;
-		float targetPressureVelocity = 0;
-		float targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
+		float targetPressureVelocity = 0.0f;
+		float targetPressureAcceleration = 0.0f;
+		long prevMillis = System.currentTimeMillis();
+		long nextRandomizeMillis = prevMillis;
 		while(System.currentTimeMillis() - startTime < mDuration) {
-			float timestep = mUpdatePeriod / 1000f;
+			long currentMillis = System.currentTimeMillis();
+			float timestep = (currentMillis - prevMillis) / 1000f;
+			
+			if(currentMillis >= nextRandomizeMillis) {
+				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
+			}
+			
+			targetPressureAcceleration -= 2.0f * (targetPressure - 0.5f);
 			targetPressureVelocity += targetPressureAcceleration * timestep;
 			targetPressure += targetPressureVelocity * timestep;
 			mTargetPressure = Math.min(1.0f, Math.max(0.0f, targetPressure));
 			
 			mEngine.getMainFrame().putText("Match the pressure: " + 100 * mTargetPressure + "%");
+			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
+			
 			ledMatrix.clear();
 			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure), 4, LedMatrix.COLOR_CYAN);
 			
@@ -43,9 +55,8 @@ public class PressureGamePhase extends GamePhase {
 //					                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
 //					                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
 			
-			
 			incrementPlayerScores();
-			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
+			
 		}
 	}
 	
