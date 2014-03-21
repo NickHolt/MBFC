@@ -14,6 +14,8 @@ import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.Range;
+
 
 /** The interface between Mind Body Fitness Challenge software and hardware. This class is responsible
  * for retrieving data from the Galileo board as well as sending data such as challenge prompts.
@@ -59,6 +61,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	/** The last recorded values for sensor readings. */
 	private float mBeatValue, mPressureValue, mHeartRateValue;
 	private float[] mAccelerationValues, mEEGValues;
+	private Range mPressureRange = new Range(0, 1000);
 	
 	public GalileoInterfacer() {
 		mAccelerationValues = new float[3];
