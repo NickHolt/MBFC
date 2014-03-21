@@ -3,7 +3,6 @@ package view;
 import java.io.Closeable;
 import java.util.regex.Pattern;
 
-import controller.Engine;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -30,37 +29,39 @@ public class LedMatrix implements Closeable {
     private int fgColor = COLOR_WHITE;
     private int bgColor = COLOR_BLACK;
     
+    private float brightness = 1.0f;
+    
     public LedMatrix() {
     	initializeSerial();
     }
     
     public void drawProgressBars(float pOnePercent, float pTwoPercent, int pOneColor, int pTwoColor) {
-    	fillRect(0, 12, (int) (LedMatrix.WIDTH * pOnePercent), 2, pOneColor);
-		fillRect(0, 14, (int) (LedMatrix.WIDTH * pTwoPercent), 2, pTwoColor);
+    	fillRect(0, 12, (int) (LedMatrix.WIDTH * pOnePercent), 2, applyBrightness(pOneColor));
+		fillRect(0, 14, (int) (LedMatrix.WIDTH * pTwoPercent), 2, applyBrightness(pTwoColor));
     }
     
     public void drawPixel(int x, int y, int color) {
-        sendCommand(String.format("p%d %d %d", x, y, color));
+        sendCommand(String.format("p%d %d %d", x, y, applyBrightness(color)));
     }
     
     public void drawLine(int x0, int y0, int x1, int y1, int color) {
-        sendCommand(String.format("l%d %d %d %d %d", x0, y0, x1, y1, color));
+        sendCommand(String.format("l%d %d %d %d %d", x0, y0, x1, y1, applyBrightness(color)));
     }
     
     public void drawRect(int x0, int y0, int w, int h, int color) {
-        sendCommand(String.format("r%d %d %d %d %d", x0, y0, w, h, color));
+        sendCommand(String.format("r%d %d %d %d %d", x0, y0, w, h, applyBrightness(color)));
     }
     
     public void fillRect(int x0, int y0, int w, int h, int color) {
-        sendCommand(String.format("R%d %d %d %d %d", x0, y0, w, h, color));
+        sendCommand(String.format("R%d %d %d %d %d", x0, y0, w, h, applyBrightness(color)));
     }
     
     public void drawCircle(int x0, int y0, int radius, int color) {
-        sendCommand(String.format("c%d %d %d %d", x0, y0, radius, color));
+        sendCommand(String.format("c%d %d %d %d", x0, y0, radius, applyBrightness(color)));
     }
     
     public void fillCircle(int x0, int y0, int radius, int color) {
-        sendCommand(String.format("C%d %d %d %d", x0, y0, radius, color));
+        sendCommand(String.format("C%d %d %d %d", x0, y0, radius, applyBrightness(color)));
     }
     
     public void setCursor(int x0, int y0) {
@@ -70,7 +71,7 @@ public class LedMatrix implements Closeable {
     public void setTextColor(int fgColor) {
     	if(this.fgColor != fgColor) {
 	    	this.fgColor = fgColor;
-	        sendCommand(String.format("f%d", fgColor));
+	        sendCommand(String.format("f%d", applyBrightness(fgColor)));
     	}
     }
     
@@ -78,7 +79,7 @@ public class LedMatrix implements Closeable {
     	if(this.fgColor != fgColor || this.bgColor != bgColor) {
 	    	this.fgColor = fgColor;
 	    	this.bgColor = bgColor;
-	        sendCommand(String.format("b%d %d", fgColor, bgColor));
+	        sendCommand(String.format("b%d %d", fgColor, applyBrightness(bgColor)));
     	}
     }
     
@@ -98,7 +99,7 @@ public class LedMatrix implements Closeable {
     }
     
     public void fillScreen(int color) {
-        sendCommand(String.format("F%d", color));
+        sendCommand(String.format("F%d", applyBrightness(color)));
     }
     
     public int getTextWidth(String str) {
@@ -135,6 +136,26 @@ public class LedMatrix implements Closeable {
     			e.printStackTrace();
     		}
     	}
+    }
+    
+    public float getBrightness() {
+    	return brightness;
+    }
+    
+    public void setBrightness(float brightness) {
+    	this.brightness = brightness;
+    }
+    
+    private int applyBrightness(int color) {
+    	int red = (color >>> 11) & 0b11111;
+    	int green = (color >>> 5) & 0b111111;
+    	int blue = color & 0b11111;
+    	
+    	red *= brightness;
+    	green *= brightness;
+    	blue *= brightness;
+    	
+    	return red << 11 | green << 5 | blue;
     }
     
     private void sendCommand(String command) {
@@ -177,5 +198,35 @@ public class LedMatrix implements Closeable {
         } catch(SerialPortException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Test code, please do not remove
+     * @param args
+     */
+    public static void main(String[] args) {
+    	LedMatrix matrix = new LedMatrix();
+    	matrix.setBrightness(0.2f);
+    	
+    	try {
+    		Thread.sleep(2000);
+    	} catch(InterruptedException e) {
+    		//ignore
+    	}
+    	
+    	matrix.setTextWrap(false);
+    	
+    	
+    	
+    	
+    	/*matrix.setTextColor(COLOR_WHITE, COLOR_BLUE);
+    	
+    	try {
+    		Thread.sleep(3000);
+    	} catch(InterruptedException e) {
+    		//ignore
+    	}
+    	
+    	matrix.scroll("Hey", 0, 100);*/
     }
 }

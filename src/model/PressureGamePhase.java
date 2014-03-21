@@ -7,7 +7,6 @@ import controller.Engine;
 
 
 public class PressureGamePhase extends GamePhase {
-	public static final float[] PRESSURE_RANGE = new float[]{0.0f, 1000.0f};
 	private float mTargetPressure;
 
 	public PressureGamePhase(Player playerOne, Player playerTwo, Engine engine) {
@@ -27,18 +26,24 @@ public class PressureGamePhase extends GamePhase {
 		long startTime = System.currentTimeMillis();
 		Random rand = new Random(System.currentTimeMillis());
 		
+		float targetPressure = 0.5f;
+		float targetPressureVelocity = 0;
+		float targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
 		while(System.currentTimeMillis() - startTime < mDuration) {
-			mTargetPressure = rand.nextFloat() * (PRESSURE_RANGE[1] - PRESSURE_RANGE[0]) +
-					          PRESSURE_RANGE[0];
-			mEngine.getMainFrame().putText("Match the pressure: " + 100 * (mTargetPressure / 1000.0f) + "%");
+			float timestep = mUpdatePeriod / 1000f;
+			targetPressureVelocity += targetPressureAcceleration * timestep;
+			targetPressure += targetPressureVelocity * timestep;
+			mTargetPressure = Math.min(1.0f, Math.max(0.0f, targetPressure));
+			
+			mEngine.getMainFrame().putText("Match the pressure: " + 100 * mTargetPressure + "%");
 			ledMatrix.clear();
-			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure / 1000f), 4, LedMatrix.COLOR_CYAN);
+			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure), 4, LedMatrix.COLOR_CYAN);
 			
-			ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
-					                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
-					                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
+//			ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
+//					                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
+//					                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
 			
-			Thread.sleep(mUpdatePeriod);
+			
 			incrementPlayerScores();
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
 		}

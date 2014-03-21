@@ -1,6 +1,5 @@
 package controller;
 
-import jssc.SerialPortException;
 import model.GamePhase;
 import model.PhaseTag;
 import model.Player;
