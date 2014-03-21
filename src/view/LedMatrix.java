@@ -177,12 +177,8 @@ public class LedMatrix implements Closeable {
     }
     
     private void initializeSerial() {
-    	String[] serialPortNames = SerialPortList.getPortNames("/dev/", Pattern.compile("tty.(serial|usbserial|usbmodem).*"));
-        if(serialPortNames.length > 0) {
-        	serialPort = new SerialPort(serialPortNames[0]);
-        } else {
-        	serialPort = new SerialPort("COM8");
-        }
+    	String[] serialPortNames = SerialPortList.getPortNames();
+        serialPort = new SerialPort(serialPortNames[0]);
         
         try {
             serialPort.openPort();
