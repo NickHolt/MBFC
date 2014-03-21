@@ -54,7 +54,8 @@ public abstract class GamePhase {
 		LedMatrix ledMatrix = mEngine.getLedMatrix();
 
 		ledMatrix.clear();
-		ledMatrix.drawTextCentered(String.valueOf(this.getPhaseTag()), 16, 1);
+		ledMatrix.setTextSize(1);
+		ledMatrix.scroll(getPhaseTag().toString().replace("_", " "), 4, 80);
 		ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
                                    mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
                                    Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
