@@ -60,10 +60,6 @@ public abstract class GamePhase {
                                    Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
 	}
 	
-	/** Draw any additional phase-specific graphics. Does nothing by default.
-	 */
-	public void drawPhaseGraphics() {}
-	
 	/**
 	 * @return the relevant player score from the Galileo board.
 	 */
