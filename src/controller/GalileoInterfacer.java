@@ -199,7 +199,7 @@ public class GalileoInterfacer implements SerialPortEventListener {
 	}
 
 	public float getPressureValue() {
-		return 1000 - mPressureValue;
+		return mPressureRange.normalize(1000 - mPressureValue);
 	}
 
 	public float getHeartRateValue() {

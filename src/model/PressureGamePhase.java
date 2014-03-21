@@ -55,7 +55,7 @@ public class PressureGamePhase extends GamePhase {
 			
 			ledMatrix.clear();
 			ledMatrix.fillAntialiasedProgressBar(mTargetPressure, 0, 4, LedMatrix.COLOR_CYAN);
-			ledMatrix.fillAntialiasedProgressBar(interfacer1.getPressureValue(), 8, 4, Engine.COLOR_PLAYER_1);
+			ledMatrix.fillAntialiasedProgressBar(engine.interfacer1.getPressureValue(), 8, 4, Engine.COLOR_PLAYER_1);
 			ledMatrix.fillAntialiasedProgressBar(interfacer2.getPressureValue(), 12, 4, Engine.COLOR_PLAYER_2);
 			
 			if(currentMillis >= nextIncrementPlayerScores) {
