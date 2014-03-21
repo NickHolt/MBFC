@@ -2,6 +2,9 @@ package model;
 
 import java.util.Random;
 
+import org.bukkit.util.noise.OctaveGenerator;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
+
 import view.LedMatrix;
 import controller.Engine;
 import controller.GalileoInterfacer;
@@ -30,25 +33,13 @@ public class PressureGamePhase extends GamePhase {
 		long startTime = System.currentTimeMillis();
 		Random rand = new Random(System.currentTimeMillis());
 		
-		float targetPressure = 0.5f;
-		float targetPressureVelocity = 0.0f;
-		float targetPressureAcceleration = 0.0f;
+		SimplexOctaveGenerator noise = new SimplexOctaveGenerator(1337, 3);
 		long prevMillis = System.currentTimeMillis();
-		long nextRandomizeMillis = prevMillis;
 		long nextIncrementPlayerScores = prevMillis;
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			long currentMillis = System.currentTimeMillis();
-			float timestep = (currentMillis - prevMillis) / 1000f;
 			
-			if(currentMillis >= nextRandomizeMillis) {
-				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
-				nextRandomizeMillis = currentMillis + mRandomizeInterval;
-			}
-			
-			targetPressureAcceleration -= 2.0f * (targetPressure - 0.5f);
-			targetPressureVelocity += targetPressureAcceleration * timestep;
-			targetPressure += targetPressureVelocity * timestep;
-			mTargetPressure = Math.min(1.0f, Math.max(0.0f, targetPressure));
+			mTargetPressure = (float) noise.noise(currentMillis, 0.5f, 0.5f, true);
 			
 			mEngine.getMainFrame().putText("Match the pressure: " + 100 * mTargetPressure + "%");
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
@@ -62,6 +53,8 @@ public class PressureGamePhase extends GamePhase {
 				incrementPlayerScores();
 				nextIncrementPlayerScores = currentMillis + mUpdatePeriod;
 			}
+			
+			prevMillis = currentMillis;
 		}
 	}
 	
