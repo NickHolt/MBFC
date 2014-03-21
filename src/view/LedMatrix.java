@@ -29,7 +29,7 @@ public class LedMatrix implements Closeable {
     private int fgColor = COLOR_WHITE;
     private int bgColor = COLOR_BLACK;
     
-    private float brightness = 1.0f;
+    private float globalBrightness = 1.0f;
     
     public LedMatrix() {
     	initializeSerial();
@@ -138,15 +138,24 @@ public class LedMatrix implements Closeable {
     	}
     }
     
+    public void fillAntialiasedProgressBar(float normalizedValue, int y, int height, int color) {
+    	fillRect(0, y, (int)(WIDTH * normalizedValue), height, color);
+    	fillRect((int)(WIDTH * normalizedValue), y, 1, height, applyBrightness(color, WIDTH * normalizedValue % 1.0f));
+    }
+    
     public float getBrightness() {
-    	return brightness;
+    	return globalBrightness;
     }
     
     public void setBrightness(float brightness) {
-    	this.brightness = brightness;
+    	this.globalBrightness = brightness;
     }
     
     private int applyBrightness(int color) {
+    	return applyBrightness(color, globalBrightness);
+    }
+    
+    private int applyBrightness(int color, float brightness) {
     	int red = (color >>> 11) & 0b11111;
     	int green = (color >>> 5) & 0b111111;
     	int blue = color & 0b11111;
@@ -206,7 +215,7 @@ public class LedMatrix implements Closeable {
      */
     public static void main(String[] args) {
     	LedMatrix matrix = new LedMatrix();
-    	matrix.setBrightness(0.2f);
+    	matrix.setBrightness(0.5f);
     	
     	try {
     		Thread.sleep(2000);
@@ -216,8 +225,14 @@ public class LedMatrix implements Closeable {
     	
     	matrix.setTextWrap(false);
     	
-    	
-    	
+    	for(float i = 0.0f; i < 1000.0f; i += 0.1f) {
+    		matrix.fillAntialiasedProgressBar((float)(Math.sin(i) * 0.5f + 0.5f), 12, 4, COLOR_BLUE);
+    		try {
+        		Thread.sleep(200);
+        	} catch(InterruptedException e) {
+        		//ignore
+        	}
+    	}
     	
     	/*matrix.setTextColor(COLOR_WHITE, COLOR_BLUE);
     	

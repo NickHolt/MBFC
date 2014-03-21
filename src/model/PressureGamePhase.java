@@ -4,6 +4,7 @@ import java.util.Random;
 
 import view.LedMatrix;
 import controller.Engine;
+import controller.GalileoInterfacer;
 
 
 public class PressureGamePhase extends GamePhase {
@@ -23,6 +24,8 @@ public class PressureGamePhase extends GamePhase {
 	@Override
 	public void play() throws InterruptedException {
 		LedMatrix ledMatrix = mEngine.getLedMatrix();
+		GalileoInterfacer interfacer1 = mEngine.getPlayerOneGalileoInterfacer();
+		GalileoInterfacer interfacer2 = mEngine.getPlayerTwoGalileoInterfacer();
 		
 		long startTime = System.currentTimeMillis();
 		Random rand = new Random(System.currentTimeMillis());
@@ -32,12 +35,14 @@ public class PressureGamePhase extends GamePhase {
 		float targetPressureAcceleration = 0.0f;
 		long prevMillis = System.currentTimeMillis();
 		long nextRandomizeMillis = prevMillis;
+		long nextIncrementPlayerScores = prevMillis;
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			long currentMillis = System.currentTimeMillis();
 			float timestep = (currentMillis - prevMillis) / 1000f;
 			
 			if(currentMillis >= nextRandomizeMillis) {
 				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
+				nextRandomizeMillis = currentMillis + mRandomizeInterval;
 			}
 			
 			targetPressureAcceleration -= 2.0f * (targetPressure - 0.5f);
@@ -49,14 +54,14 @@ public class PressureGamePhase extends GamePhase {
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
 			
 			ledMatrix.clear();
-			ledMatrix.fillRect(0, 0, Math.round(LedMatrix.WIDTH * mTargetPressure), 4, LedMatrix.COLOR_CYAN);
+			ledMatrix.fillAntialiasedProgressBar(mTargetPressure, 0, 4, LedMatrix.COLOR_CYAN);
+			ledMatrix.fillAntialiasedProgressBar(interfacer1.getPressureValue(), 8, 4, Engine.COLOR_PLAYER_1);
+			ledMatrix.fillAntialiasedProgressBar(interfacer2.getPressureValue(), 12, 4, Engine.COLOR_PLAYER_2);
 			
-//			ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
-//					                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
-//					                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
-			
-			incrementPlayerScores();
-			
+			if(currentMillis >= nextIncrementPlayerScores) {
+				incrementPlayerScores();
+				nextIncrementPlayerScores = currentMillis + mUpdatePeriod;
+			}
 		}
 	}
 	
