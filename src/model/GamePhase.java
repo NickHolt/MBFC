@@ -39,6 +39,9 @@ public abstract class GamePhase {
 	 *  data periodically.
 	 */
 	public void play() throws InterruptedException {
+		mPlayerOne.setCurrentScore(0);
+		mPlayerTwo.setCurrentScore(0);
+		
 		long startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			Thread.sleep(mUpdatePeriod);
@@ -56,8 +59,8 @@ public abstract class GamePhase {
 		ledMatrix.clear();
 		ledMatrix.setTextSize(1);
 		ledMatrix.scroll(getPhaseTag().toString().replace("_", " "), 4, 80);
-		ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
-                                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
+		ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / this.getMaxScore(), 
+                                   mPlayerTwo.getCurrentScore() / this.getMaxScore(), 
                                    Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
 	}
 	

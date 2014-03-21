@@ -2,9 +2,6 @@ package model;
 
 import java.util.Random;
 
-import org.bukkit.util.noise.OctaveGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
-
 import view.LedMatrix;
 import controller.Engine;
 import controller.GalileoInterfacer;
@@ -26,6 +23,9 @@ public class PressureGamePhase extends GamePhase {
 	
 	@Override
 	public void play() throws InterruptedException {
+		mPlayerOne.setCurrentScore(0);
+		mPlayerTwo.setCurrentScore(0);
+		
 		LedMatrix ledMatrix = mEngine.getLedMatrix();
 		GalileoInterfacer interfacer1 = mEngine.getPlayerOneGalileoInterfacer();
 		GalileoInterfacer interfacer2 = mEngine.getPlayerTwoGalileoInterfacer();
@@ -33,13 +33,27 @@ public class PressureGamePhase extends GamePhase {
 		long startTime = System.currentTimeMillis();
 		Random rand = new Random(System.currentTimeMillis());
 		
-		SimplexOctaveGenerator noise = new SimplexOctaveGenerator(1337, 3);
+		float targetPressure = 0.5f;
+		float targetPressureVelocity = 0.0f;
+		float targetPressureAcceleration = 0.0f;
 		long prevMillis = System.currentTimeMillis();
+		long nextRandomizeMillis = prevMillis;
 		long nextIncrementPlayerScores = prevMillis;
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			long currentMillis = System.currentTimeMillis();
+			float timestep = (currentMillis - prevMillis) / 1000f;
 			
-			mTargetPressure = (float) noise.noise(currentMillis, 0.5f, 0.5f, true);
+			if(currentMillis >= nextRandomizeMillis) {
+				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 0.001f;
+				nextRandomizeMillis = currentMillis + mRandomizeInterval;
+			}
+			
+			targetPressureAcceleration -= 0.5f * (targetPressure - 0.5f);
+			targetPressureVelocity += targetPressureAcceleration * timestep;
+			targetPressure += targetPressureVelocity * timestep;
+			mTargetPressure = Math.min(1.0f, Math.max(0.0f, targetPressure));
+			
+			System.out.println(targetPressure);
 			
 			mEngine.getMainFrame().putText("Match the pressure: " + 100 * mTargetPressure + "%");
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());

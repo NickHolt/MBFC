@@ -67,7 +67,7 @@ public class Engine {
 			
 			mMainFrame.initialize();
 			
-			welcome();
+			//welcome();
 			playMain();
 			conclude();
 			
@@ -98,11 +98,6 @@ public class Engine {
 	 */
 	private void playMain() throws InterruptedException {
 		for (GamePhase currentPhase : mGamePhases) {
-			// initialize player scores for the phase
-			System.out.println("NEXT PHASE");
-			mPlayerOne.setCurrentScore(0);
-			mPlayerTwo.setCurrentScore(0);
-			
 			mLedMatrix.clear();
 			mLedMatrix.setTextSize(1);
 			mLedMatrix.scroll(currentPhase.getPhaseTag().toString().replace("_", " "), 4, 80);
