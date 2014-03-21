@@ -23,6 +23,9 @@ public class PressureGamePhase extends GamePhase {
 	
 	@Override
 	public void play() throws InterruptedException {
+		mPlayerOne.setCurrentScore(0);
+		mPlayerTwo.setCurrentScore(0);
+		
 		LedMatrix ledMatrix = mEngine.getLedMatrix();
 		GalileoInterfacer interfacer1 = mEngine.getPlayerOneGalileoInterfacer();
 		GalileoInterfacer interfacer2 = mEngine.getPlayerTwoGalileoInterfacer();
@@ -41,14 +44,16 @@ public class PressureGamePhase extends GamePhase {
 			float timestep = (currentMillis - prevMillis) / 1000f;
 			
 			if(currentMillis >= nextRandomizeMillis) {
-				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 5.0f;
+				targetPressureAcceleration = (rand.nextFloat() - 0.5f) * 0.001f;
 				nextRandomizeMillis = currentMillis + mRandomizeInterval;
 			}
 			
-			targetPressureAcceleration -= 2.0f * (targetPressure - 0.5f);
+			targetPressureAcceleration -= 0.5f * (targetPressure - 0.5f);
 			targetPressureVelocity += targetPressureAcceleration * timestep;
 			targetPressure += targetPressureVelocity * timestep;
 			mTargetPressure = Math.min(1.0f, Math.max(0.0f, targetPressure));
+			
+			System.out.println(targetPressure);
 			
 			mEngine.getMainFrame().putText("Match the pressure: " + 100 * mTargetPressure + "%");
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
@@ -62,6 +67,8 @@ public class PressureGamePhase extends GamePhase {
 				incrementPlayerScores();
 				nextIncrementPlayerScores = currentMillis + mUpdatePeriod;
 			}
+			
+			prevMillis = currentMillis;
 		}
 	}
 	
