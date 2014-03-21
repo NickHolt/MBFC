@@ -39,8 +39,6 @@ public abstract class GamePhase {
 	 *  data periodically.
 	 */
 	public void play() throws InterruptedException {
-		LedMatrix ledMatrix = mEngine.getLedMatrix();
-		
 		long startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < mDuration) {
 			Thread.sleep(mUpdatePeriod);
@@ -48,13 +46,23 @@ public abstract class GamePhase {
 			
 			mEngine.getMainFrame().update(mPlayerOne, mPlayerTwo, mEngine.getMaxScore());
 			
-			ledMatrix.clear();
-			ledMatrix.drawTextCentered(String.valueOf(this.getPhaseTag()), 16, 1);
-			ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
-	                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
-	                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
+			drawMatrix();
 		}
 	}
+	
+	public void drawMatrix() {
+		LedMatrix ledMatrix = mEngine.getLedMatrix();
+
+		ledMatrix.clear();
+		ledMatrix.drawTextCentered(String.valueOf(this.getPhaseTag()), 16, 1);
+		ledMatrix.drawProgressBars(mPlayerOne.getCurrentScore() / mEngine.getMaxScore(), 
+                                   mPlayerTwo.getCurrentScore() / mEngine.getMaxScore(), 
+                                   Engine.COLOR_PLAYER_1, Engine.COLOR_PLAYER_2);
+	}
+	
+	/** Draw any additional phase-specific graphics. Does nothing by default.
+	 */
+	public void drawPhaseGraphics() {}
 	
 	/**
 	 * @return the relevant player score from the Galileo board.
